@@ -17,6 +17,13 @@ export default function AdminPropertyCreate() {
         number_of_bathrooms: '',
         is_available: true,
         user_id: '', // Admin can assign to any user
+        // Address fields
+        address_line_1: '',
+        address_line_2: '',
+        city: '',
+        state: '',
+        zip_code: '',
+        country: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -134,6 +141,75 @@ export default function AdminPropertyCreate() {
                             className={errors.user_id ? 'border-red-500' : ''}
                         />
                         {errors.user_id && <p className="text-red-500 text-sm">{errors.user_id}</p>}
+                    </div>
+
+                    {/* Address Fields */}
+                    <h2 className="text-xl font-bold mt-6 mb-4">Address Details</h2>
+                    <div>
+                        <Label htmlFor="address_line_1">Address Line 1</Label>
+                        <Input
+                            id="address_line_1"
+                            type="text"
+                            value={data.address_line_1}
+                            onChange={(e) => setData('address_line_1', e.target.value)}
+                            className={errors.address_line_1 ? 'border-red-500' : ''}
+                        />
+                        {errors.address_line_1 && <p className="text-red-500 text-sm">{errors.address_line_1}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="address_line_2">Address Line 2 (Optional)</Label>
+                        <Input
+                            id="address_line_2"
+                            type="text"
+                            value={data.address_line_2}
+                            onChange={(e) => setData('address_line_2', e.target.value)}
+                            className={errors.address_line_2 ? 'border-red-500' : ''}
+                        />
+                        {errors.address_line_2 && <p className="text-red-500 text-sm">{errors.address_line_2}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="city">City</Label>
+                        <Input
+                            id="city"
+                            type="text"
+                            value={data.city}
+                            onChange={(e) => setData('city', e.target.value)}
+                            className={errors.city ? 'border-red-500' : ''}
+                        />
+                        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="state">State</Label>
+                        <Input
+                            id="state"
+                            type="text"
+                            value={data.state}
+                            onChange={(e) => setData('state', e.target.value)}
+                            className={errors.state ? 'border-red-500' : ''}
+                        />
+                        {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="zip_code">Zip Code</Label>
+                        <Input
+                            id="zip_code"
+                            type="text"
+                            value={data.zip_code}
+                            onChange={(e) => setData('zip_code', e.target.value)}
+                            className={errors.zip_code ? 'border-red-500' : ''}
+                        />
+                        {errors.zip_code && <p className="text-red-500 text-sm">{errors.zip_code}</p>}
+                    </div>
+                    <div>
+                        <Label htmlFor="country">Country</Label>
+                        <Input
+                            id="country"
+                            type="text"
+                            value={data.country}
+                            onChange={(e) => setData('country', e.target.value)}
+                            className={errors.country ? 'border-red-500' : ''}
+                        />
+                        {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
                     </div>
 
                     <Button type="submit" disabled={processing}>Create Property</Button>

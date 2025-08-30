@@ -19,7 +19,13 @@ class Property extends Model
         'number_of_beds',
         'number_of_bathrooms',
         'is_available',
+        // 'address', // We'll handle address creation/update explicitly, not via mass assignment
     ];
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
 
     public function amenities()
     {

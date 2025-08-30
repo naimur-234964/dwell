@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
+import { type Address } from '@/types'; // Import Address type
+
 interface AdminPropertyShowProps {
-    property: Property;
+    property: Property & { address: Address }; // Extend Property type to include address
 }
 
 export default function AdminPropertyShow({ property }: AdminPropertyShowProps) {
@@ -39,6 +41,24 @@ export default function AdminPropertyShow({ property }: AdminPropertyShowProps) 
                                 <p className="col-span-1"><strong>Number of Bedrooms:</strong></p><p className="col-span-3">{property.number_of_bedrooms}</p>
                                 <p className="col-span-1"><strong>Number of Beds:</strong></p><p className="col-span-3">{property.number_of_beds}</p>
                                 <p className="col-span-1"><strong>Number of Bathrooms:</strong></p><p className="col-span-3">{property.number_of_bathrooms}</p>
+                            </div>
+                        </div>
+
+                        <Separator />
+
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2">Address Details</h3>
+                            <div className="grid grid-cols-4 gap-x-4 gap-y-2">
+                                <p className="col-span-1"><strong>Address Line 1:</strong></p><p className="col-span-3">{property.address.address_line_1}</p>
+                                {property.address.address_line_2 && (
+                                    <>
+                                        <p className="col-span-1"><strong>Address Line 2:</strong></p><p className="col-span-3">{property.address.address_line_2}</p>
+                                    </>
+                                )}
+                                <p className="col-span-1"><strong>City:</strong></p><p className="col-span-3">{property.address.city}</p>
+                                <p className="col-span-1"><strong>State:</strong></p><p className="col-span-3">{property.address.state}</p>
+                                <p className="col-span-1"><strong>Zip Code:</strong></p><p className="col-span-3">{property.address.zip_code}</p>
+                                <p className="col-span-1"><strong>Country:</strong></p><p className="col-span-3">{property.address.country}</p>
                             </div>
                         </div>
 
