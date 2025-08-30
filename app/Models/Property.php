@@ -32,14 +32,9 @@ class Property extends Model
         return $this->belongsToMany(Amenity::class, 'property_amenities');
     }
 
-    public function addresses()
+    public function propertyImages()
     {
-        return $this->hasMany(Address::class);
-    }
-
-    public function images()
-    {
-        return $this->hasMany(PropertyImage::class);
+        return $this->hasMany(PropertyImage::class)->orderBy('order');
     }
 
     public function bookings()

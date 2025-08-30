@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Address; // Import Address model
 use App\Models\Amenity; // Import Amenity model
+use App\Models\PropertyImage; // Import PropertyImage model
+use Illuminate\Support\Facades\Storage; // Import Storage facade
 use Inertia\Inertia;
 
 class AdminPropertyController extends Controller
@@ -55,6 +57,10 @@ class AdminPropertyController extends Controller
             // Amenities field
             'amenities' => 'array',
             'amenities.*' => 'exists:amenities,id',
+
+            // Image fields
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $property = Property::create([
@@ -81,6 +87,17 @@ class AdminPropertyController extends Controller
         // Sync amenities
         $property->amenities()->sync($validatedData['amenities'] ?? []);
 
+        // Handle image uploads
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('properties', 'public');
+                $property->propertyImages()->create([
+                    'image_path' => $path,
+                    'order' => $index,
+                ]);
+            }
+        }
+
         return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
     }
 
@@ -89,7 +106,7 @@ class AdminPropertyController extends Controller
      */
     public function show(Property $property)
     {
-        $property->load('address', 'amenities'); // Eager load the address relationship
+        $property->load('address', 'amenities', 'propertyImages'); // Eager load the address relationship
         return Inertia::render('Admin/Properties/Show', ['property' => $property]);
     }
 
@@ -98,7 +115,7 @@ class AdminPropertyController extends Controller
      */
     public function edit(Property $property)
     {
-        $property->load('address', 'amenities'); // Eager load address and amenities relationships
+        $property->load('address', 'amenities', 'propertyImages'); // Eager load address, amenities and propertyImages relationships
         $amenities = Amenity::all(); // Get all available amenities
         return Inertia::render('Admin/Properties/Edit', [
             'property' => $property,
@@ -133,6 +150,13 @@ class AdminPropertyController extends Controller
             // Amenities field
             'amenities' => 'array',
             'amenities.*' => 'exists:amenities,id',
+
+            // Image fields
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'deleted_images' => 'nullable|array',
+            'deleted_images.*' => 'integer|exists:property_images,id',
+            'existing_images' => 'nullable|array',
         ]);
 
         $property->update([
@@ -159,6 +183,39 @@ class AdminPropertyController extends Controller
 
         // Sync amenities
         $property->amenities()->sync($validatedData['amenities'] ?? []);
+
+        // Handle image deletion
+        if (!empty($validatedData['deleted_images'])) {
+            foreach ($validatedData['deleted_images'] as $imageId) {
+                $image = PropertyImage::find($imageId);
+                if ($image) {
+                    Storage::disk('public')->delete($image->image_path);
+                    $image->delete();
+                }
+            }
+        }
+
+        // Handle image reordering
+        if (!empty($validatedData['existing_images'])) {
+            foreach ($validatedData['existing_images'] as $index => $image_data) {
+                $image = PropertyImage::find($image_data['id']);
+                if ($image) {
+                    $image->update(['order' => $index]);
+                }
+            }
+        }
+
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            $lastOrder = $property->propertyImages()->max('order') ?? -1;
+            foreach ($request->file('images') as $index => $image) {
+                $path = $image->store('properties', 'public');
+                $property->propertyImages()->create([
+                    'image_path' => $path,
+                    'order' => $lastOrder + 1 + $index,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.properties.index')->with('success', 'Property updated successfully.');
     }

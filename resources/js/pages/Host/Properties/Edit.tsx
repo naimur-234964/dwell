@@ -5,16 +5,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Amenity, Property } from '@/types';
+import { Amenity, Property, PropertyImage } from '@/types';
 import { useState } from 'react';
+import ImageUpload from '@/components/image-upload';
 
 interface HostPropertyEditProps {
-    property: Property & { address: Address; amenities: Amenity[] };
+    property: Property & { address: Address; amenities: Amenity[]; property_images: PropertyImage[] };
     amenities: Amenity[];
 }
 
 export default function HostPropertyEdit({ property, amenities }: HostPropertyEditProps) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         title: property.title,
         description: property.description,
         price_per_night: property.price_per_night,
@@ -30,6 +31,10 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
         zip_code: property.address.zip_code,
         country: property.address.country,
         amenities: property.amenities.map((a) => a.id),
+        images: [] as File[],
+        existing_images: property.property_images || [],
+        deleted_images: [] as number[],
+        _method: 'put',
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -52,7 +57,7 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(route('host.properties.update', property.id));
+        post(route('host.properties.update', property.id));
     };
 
     return (
@@ -203,6 +208,17 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
                             </div>
                         )}
                         {errors.amenities && <p className="text-red-500 text-sm">{errors.amenities}</p>}
+                    </div>
+
+                    {/* Image Upload */}
+                    <div>
+                        <ImageUpload
+                            onImagesChange={(images) => setData('images', images)}
+                            existingImages={data.existing_images}
+                            onExistingImagesChange={(images) => setData('existing_images', images)}
+                            onImageDelete={(id) => setData('deleted_images', [...data.deleted_images, id])}
+                        />
+                        {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
                     </div>
 
                     {/* Address Fields */}

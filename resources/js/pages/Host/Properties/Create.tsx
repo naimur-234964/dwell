@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Amenity } from '@/types';
 import { useState } from 'react';
+import ImageUpload from '@/components/image-upload';
 
 export default function HostPropertyCreate({ amenities }: { amenities: Amenity[] }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -25,6 +26,7 @@ export default function HostPropertyCreate({ amenities }: { amenities: Amenity[]
         zip_code: '',
         country: '',
         amenities: [] as number[],
+        images: [] as File[],
     });
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -198,6 +200,12 @@ export default function HostPropertyCreate({ amenities }: { amenities: Amenity[]
                             </div>
                         )}
                         {errors.amenities && <p className="text-red-500 text-sm">{errors.amenities}</p>}
+                    </div>
+
+                    {/* Image Upload */}
+                    <div>
+                        <ImageUpload onImagesChange={(images) => setData('images', images)} />
+                        {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
                     </div>
 
                     {/* Address Fields */}
