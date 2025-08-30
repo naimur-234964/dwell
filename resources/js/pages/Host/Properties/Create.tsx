@@ -203,6 +203,7 @@ export default function HostPropertyCreate({ amenities }: { amenities: Amenity[]
                     </div>
 
                     {/* Image Upload */}
+                    <h2 className="text-xl font-bold mt-6 mb-4">Add Image</h2>
                     <div>
                         <ImageUpload onImagesChange={(images) => setData('images', images)} />
                         {errors.images && <p className="text-red-500 text-sm">{errors.images}</p>}
