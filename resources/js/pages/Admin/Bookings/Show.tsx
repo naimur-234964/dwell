@@ -30,7 +30,8 @@ export default function AdminBookingShow({ booking }: AdminBookingShowProps) { /
                             <div className="grid grid-cols-4 gap-x-4 gap-y-2">
                                 {/* TODO: Customize display fields for Booking model */}
                                 <p className="col-span-1"><strong>Property ID:</strong></p><p className="col-span-3">{booking.property_id}</p>
-                                <p className="col-span-1"><strong>User ID:</strong></p><p className="col-span-3">{booking.user_id}</p>
+                                <p className="col-span-1"><strong>User ID:</strong></p><p className="col-span-3">{booking.customer_id}</p>
+                                <p className="col-span-1"><strong>Customer Name:</strong></p><p className="col-span-3">{booking.customer?.name}</p>
                                 <p className="col-span-1"><strong>Check-in Date:</strong></p><p className="col-span-3">{booking.check_in_date}</p>
                                 <p className="col-span-1"><strong>Check-out Date:</strong></p><p className="col-span-3">{booking.check_out_date}</p>
                                 <p className="col-span-1"><strong>Total Price:</strong></p><p className="col-span-3">{booking.total_price}</p>

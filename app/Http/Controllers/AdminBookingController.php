@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Booking; // Changed from Property to Booking
+use App\Models\Booking;
 use Inertia\Inertia;
 
-class AdminBookingController extends Controller // Changed class name
+class AdminBookingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $bookings = Booking::latest()->paginate(10); // Changed from properties to bookings
-        return Inertia::render('Admin/Bookings/Index', ['bookings' => $bookings]); // Changed path and prop name
+        $bookings = Booking::with('customer')->latest()->paginate(10); // Eager load customer
+        return Inertia::render('Admin/Bookings/Index', ['bookings' => $bookings]);
     }
 
     /**
@@ -22,7 +22,7 @@ class AdminBookingController extends Controller // Changed class name
      */
     public function create()
     {
-        return Inertia::render('Admin/Bookings/Create'); // Changed path
+        return Inertia::render('Admin/Bookings/Create');
     }
 
     /**
@@ -31,7 +31,6 @@ class AdminBookingController extends Controller // Changed class name
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            // Booking fields - TODO: Customize validation rules for Booking model
             'property_id' => 'required|exists:properties,id',
             'user_id' => 'required|exists:users,id',
             'check_in_date' => 'required|date',
@@ -40,36 +39,37 @@ class AdminBookingController extends Controller // Changed class name
             'status' => 'required|string|max:255',
         ]);
 
-        Booking::create($validatedData); // Changed from Property::create to Booking::create
+        Booking::create($validatedData);
 
-        return redirect()->route('admin.bookings.index')->with('success', 'Booking created successfully.'); // Changed route and message
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking) // Changed from Property $property to Booking $booking
+    public function show(Booking $booking)
     {
-        return Inertia::render('Admin/Bookings/Show', ['booking' => $booking]); // Changed path and prop name
+        $booking->load('customer'); // Eager load customer
+        return Inertia::render('Admin/Bookings/Show', ['booking' => $booking]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Booking $booking) // Changed from Property $property to Booking $booking
+    public function edit(Booking $booking)
     {
+        $booking->load('customer'); // Eager load customer
         return Inertia::render('Admin/Bookings/Edit', [
-            'booking' => $booking, // Changed prop name
+            'booking' => $booking,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Booking $booking) // Changed from Property $property to Booking $booking
+    public function update(Request $request, Booking $booking)
     {
         $validatedData = $request->validate([
-            // Booking fields - TODO: Customize validation rules for Booking model
             'property_id' => 'required|exists:properties,id',
             'user_id' => 'required|exists:users,id',
             'check_in_date' => 'required|date',
@@ -78,17 +78,17 @@ class AdminBookingController extends Controller // Changed class name
             'status' => 'required|string|max:255',
         ]);
 
-        $booking->update($validatedData); // Changed from $property->update to $booking->update
+        $booking->update($validatedData);
 
-        return redirect()->route('admin.bookings.index')->with('success', 'Booking updated successfully.'); // Changed route and message
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Booking $booking) // Changed from Property $property to Booking $booking
+    public function destroy(Booking $booking)
     {
-        $booking->delete(); // Changed from $property->delete to $booking->delete
-        return redirect()->route('admin.bookings.index')->with('success', 'Booking deleted successfully.'); // Changed route and message
+        $booking->delete();
+        return redirect()->route('admin.bookings.index')->with('success', 'Booking deleted successfully.');
     }
 }

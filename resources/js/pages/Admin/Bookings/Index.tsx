@@ -62,6 +62,7 @@ export default function AdminBookingIndex({ bookings }: AdminBookingIndexProps) 
                                 {/* TODO: Customize table headers for Booking model */}
                                 <TableHead>Property ID</TableHead>
                                 <TableHead>User ID</TableHead>
+                                <TableHead>User Name</TableHead>
                                 <TableHead>Check-in Date</TableHead>
                                 <TableHead>Check-out Date</TableHead>
                                 <TableHead>Total Price</TableHead>
@@ -70,12 +71,13 @@ export default function AdminBookingIndex({ bookings }: AdminBookingIndexProps) 
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {filteredBookings.map((booking) => ( // Changed from filteredProperties.map((property) to filteredBookings.map((booking)
+                            {filteredBookings.map((booking) => (
                                 <TableRow key={booking.id}>
                                     <TableCell>{booking.id}</TableCell>
                                     {/* TODO: Customize table cells for Booking model */}
                                     <TableCell>{booking.property_id}</TableCell>
-                                    <TableCell>{booking.user_id}</TableCell>
+                                    <TableCell>{booking.customer_id}</TableCell>
+                                    <TableCell>{booking.customer?.name}</TableCell> {/* Display customer name */}
                                     <TableCell>{booking.check_in_date}</TableCell>
                                     <TableCell>{booking.check_out_date}</TableCell>
                                     <TableCell>${booking.total_price}</TableCell>

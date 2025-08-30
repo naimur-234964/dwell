@@ -71,6 +71,21 @@ export interface Property {
     amenities: Amenity[];
 }
 
+export interface Booking {
+    id: number;
+    property_id: number;
+    user_id: number; // This is the customer_id in the database
+    customer_id: number; // Explicitly add customer_id
+    customer?: User; // Add customer relationship
+    check_in_date: string;
+    check_out_date: string;
+    total_price: number;
+    status: string;
+    created_at: string;
+    updated_at: string;
+}
+
+
 declare global {
     interface Window {
         route: (...args: any[]) => string;
