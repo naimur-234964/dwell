@@ -17,7 +17,7 @@ class HostPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::where('user_id', auth()->id())->get();
+        $properties = Property::where('user_id', auth()->id())->latest()->paginate(10);
         return Inertia::render('Host/Properties/Index', ['properties' => $properties]);
     }
 

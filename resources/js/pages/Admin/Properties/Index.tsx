@@ -7,13 +7,21 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 interface AdminPropertyIndexProps {
-    properties: Property[];
+    properties: {
+        data: Property[];
+        links: { url: string | null; label: string; active: boolean }[];
+        current_page: number;
+        last_page: number;
+        from: number;
+        to: number;
+        total: number;
+    };
 }
 
 export default function AdminPropertyIndex({ properties }: AdminPropertyIndexProps) {
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredProperties = properties.filter(property =>
+    const filteredProperties = properties.data.filter(property =>
         property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         property.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -92,6 +100,24 @@ export default function AdminPropertyIndex({ properties }: AdminPropertyIndexPro
                 ) : (
                     <p>No properties found matching your search.</p>
                 )}
+
+                <div className="flex justify-between items-center mt-4">
+                    <div>
+                        Showing {properties.from} to {properties.to} of {properties.total} entries
+                    </div>
+                    <div className="flex gap-2">
+                        {properties.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url || '#'}
+                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                preserveScroll
+                            >
+                                {link.label.replace(/&laquo;|&raquo;/g, '')}
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </div>
         </AppLayout>
     );

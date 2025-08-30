@@ -17,7 +17,7 @@ class AdminPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::all();
+        $properties = Property::latest()->paginate(10);
         return Inertia::render('Admin/Properties/Index', ['properties' => $properties]);
     }
 
