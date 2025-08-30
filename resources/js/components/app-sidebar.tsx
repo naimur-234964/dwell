@@ -18,16 +18,92 @@ export function AppSidebar() {
             href: dashboard(),
             icon: LayoutGrid,
         },
-        ...(userRole === 'admin' ? [{
-            title: 'Properties',
-            href: '/admin/properties',
-            icon: Building,
-        }] : []),
-        ...(userRole === 'host' ? [{
-            title: 'My Properties',
-            href: '/host/properties',
-            icon: Home,
-        }] : []),
+        ...(userRole === 'admin' ? [
+            {
+                title: 'Properties',
+                href: '/admin/properties',
+                icon: Building,
+            },
+            {
+                title: 'Addresses',
+                href: '/admin/addresses',
+                icon: Home, // Using Home icon for Address
+            },
+            {
+                title: 'Amenities',
+                href: '/admin/amenities',
+                icon: BookOpen, // Using BookOpen for Amenity
+            },
+            {
+                title: 'Bookings',
+                href: '/admin/bookings',
+                icon: Folder, // Using Folder for Booking
+            },
+            {
+                title: 'Payments',
+                href: '/admin/payments',
+                icon: LayoutGrid, // Using LayoutGrid for Payment
+            },
+            {
+                title: 'Property Images',
+                href: '/admin/property-images',
+                icon: Building, // Using Building for Property Images
+            },
+            {
+                title: 'Reviews',
+                href: '/admin/reviews',
+                icon: Home, // Using Home for Review
+            },
+            {
+                title: 'Users',
+                href: '/admin/users',
+                icon: Folder, // Using Folder for User
+            },
+        ] : []),
+        ...(userRole === 'host' ? [
+            {
+                title: 'My Properties',
+                href: '/host/properties',
+                icon: Home,
+            },
+            {
+                title: 'My Bookings',
+                href: '/host/bookings',
+                icon: Folder,
+            },
+            {
+                title: 'My Amenities',
+                href: '/host/amenities',
+                icon: BookOpen,
+            },
+            {
+                title: 'My Addresses',
+                href: '/host/addresses',
+                icon: Home,
+            },
+            {
+                title: 'My Payments',
+                href: '/host/payments',
+                icon: LayoutGrid,
+            },
+        ] : []),
+        ...(userRole === 'customer' ? [
+            {
+                title: 'My Bookings',
+                href: '/customer/bookings',
+                icon: Folder,
+            },
+            {
+                title: 'My Payments',
+                href: '/customer/payments',
+                icon: LayoutGrid,
+            },
+            {
+                title: 'My Reviews',
+                href: '/customer/reviews',
+                icon: Home,
+            },
+        ] : []),
     ];
 
     const footerNavItems: NavItem[] = [
