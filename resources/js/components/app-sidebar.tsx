@@ -5,11 +5,11 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react'; // Added usePage
-import { BookOpen, Folder, LayoutGrid, Home, Building } from 'lucide-react'; // Added Home and Building
+import { BookOpen, Folder, LayoutGrid, Home, Building, MapPin, Sparkles, CalendarCheck, CreditCard, Image, MessageSquare, Users, Github, BookText } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
-    const { auth } = usePage().props as { auth: { userRole: string } }; // Get auth from usePage().props
+    const { auth } = usePage().props as { auth: { userRole: string } };
     const userRole = auth.userRole;
 
     const mainNavItems: NavItem[] = [
@@ -27,81 +27,81 @@ export function AppSidebar() {
             {
                 title: 'Addresses',
                 href: '/admin/addresses',
-                icon: Home, // Using Home icon for Address
+                icon: MapPin,
             },
             {
                 title: 'Amenities',
                 href: '/admin/amenities',
-                icon: BookOpen, // Using BookOpen for Amenity
+                icon: Sparkles,
             },
             {
                 title: 'Bookings',
                 href: '/admin/bookings',
-                icon: Folder, // Using Folder for Booking
+                icon: CalendarCheck,
             },
             {
                 title: 'Payments',
                 href: '/admin/payments',
-                icon: LayoutGrid, // Using LayoutGrid for Payment
+                icon: CreditCard,
             },
             {
                 title: 'Property Images',
                 href: '/admin/property-images',
-                icon: Building, // Using Building for Property Images
+                icon: Image,
             },
             {
                 title: 'Reviews',
                 href: '/admin/reviews',
-                icon: Home, // Using Home for Review
+                icon: MessageSquare,
             },
             {
                 title: 'Users',
                 href: '/admin/users',
-                icon: Folder, // Using Folder for User
+                icon: Users,
             },
         ] : []),
         ...(userRole === 'host' ? [
             {
                 title: 'My Properties',
                 href: '/host/properties',
-                icon: Home,
+                icon: Building,
             },
             {
                 title: 'My Bookings',
                 href: '/host/bookings',
-                icon: Folder,
+                icon: CalendarCheck,
             },
             {
                 title: 'My Amenities',
                 href: '/host/amenities',
-                icon: BookOpen,
+                icon: Sparkles,
             },
             {
                 title: 'My Addresses',
                 href: '/host/addresses',
-                icon: Home,
+                icon: MapPin,
             },
             {
                 title: 'My Payments',
                 href: '/host/payments',
-                icon: LayoutGrid,
+                icon: CreditCard,
             },
         ] : []),
         ...(userRole === 'customer' ? [
             {
                 title: 'My Bookings',
                 href: '/customer/bookings',
-                icon: Folder,
+                icon: CalendarCheck,
             },
             {
                 title: 'My Payments',
                 href: '/customer/payments',
-                icon: LayoutGrid,
+                icon: CreditCard,
             },
             {
                 title: 'My Reviews',
                 href: '/customer/reviews',
-                icon: Home,
+                icon: MessageSquare,
             },
         ] : []),
     ];
@@ -110,12 +110,12 @@ export function AppSidebar() {
         {
             title: 'Repository',
             href: 'https://github.com/laravel/react-starter-kit',
-            icon: Folder,
+            icon: Github,
         },
         {
             title: 'Documentation',
             href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookOpen,
+            icon: BookText,
         },
     ];
 
