@@ -15,9 +15,14 @@ export default function HostPropertyShow({ property }: HostPropertyShowProps) {
             <Head title={`Property: ${property.title}`} />
             <div className="p-4">
                 <Card>
-                    <CardHeader>
+                    <CardHeader className="relative">
                         <CardTitle>Property Details (Host)</CardTitle>
                         <CardDescription>Information about {property.title}</CardDescription>
+                        <div className="absolute top-4 right-4">
+                            <Link href="/host/properties">
+                                <Button variant="outline">Back to List</Button>
+                            </Link>
+                        </div>
                     {property.property_images && property.property_images.length > 0 && (
                         <div className="mt-4 flex flex-wrap gap-4">
                             {property.property_images.map((image) => (
@@ -90,15 +95,6 @@ export default function HostPropertyShow({ property }: HostPropertyShowProps) {
                             <div className="grid grid-cols-4 gap-x-4 gap-y-2">
                                 <p className="col-span-1"><strong>Property ID:</strong></p><p className="col-span-3">{property.id}</p>
                             </div>
-                        </div>
-
-                        <div className="mt-4 flex gap-2">
-                            <Link href={`/host/properties/${property.id}/edit`}>
-                                <Button>Edit Property</Button>
-                            </Link>
-                            <Link href="/host/properties">
-                                <Button variant="outline">Back to List</Button>
-                            </Link>
                         </div>
                     </CardContent>
                 </Card>

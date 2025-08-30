@@ -15,9 +15,14 @@ export default function AdminPropertyShow({ property }: AdminPropertyShowProps) 
             <Head title={`Property: ${property.title}`} />
             <div className="p-4">
                 <Card>
-                    <CardHeader>
+                    <CardHeader className="relative">
                         <CardTitle>Property Details (Admin)</CardTitle>
                         <CardDescription>Information about {property.title}</CardDescription>
+                        <div className="absolute top-4 right-4">
+                            <Link href="/admin/properties">
+                                <Button variant="outline">Back to List</Button>
+                            </Link>
+                        </div>
                         {property.property_images && property.property_images.length > 0 && (
                             <div className="mt-4 flex flex-wrap gap-4">
                                 {property.property_images.map((image) => (
@@ -91,15 +96,6 @@ export default function AdminPropertyShow({ property }: AdminPropertyShowProps) 
                                 <p className="col-span-1"><strong>Property ID:</strong></p><p className="col-span-3">{property.id}</p>
                                 <p className="col-span-1"><strong>Host ID:</strong></p><p className="col-span-3">{property.user_id}</p>
                             </div>
-                        </div>
-
-                        <div className="mt-4 flex gap-2">
-                            <Link href={`/admin/properties/${property.id}/edit`}>
-                                <Button>Edit Property</Button>
-                            </Link>
-                            <Link href="/admin/properties">
-                                <Button variant="outline">Back to List</Button>
-                            </Link>
                         </div>
                     </CardContent>
                 </Card>

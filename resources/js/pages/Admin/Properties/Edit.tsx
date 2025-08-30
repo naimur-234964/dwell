@@ -1,5 +1,5 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Amenity, Property, PropertyImage } from '@/types';
 import { useState } from 'react';
 import ImageUpload from '@/components/image-upload';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AdminPropertyEditProps {
     property: Property & { address: Address; amenities: Amenity[]; property_images: PropertyImage[] };
@@ -65,8 +66,18 @@ export default function AdminPropertyEdit({ property, amenities }: AdminProperty
         <AppLayout>
             <Head title={`Edit Property: ${property.title}`} />
             <div className="p-4">
-                <h1 className="text-2xl font-bold mb-4">Edit Property (Admin)</h1>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <Card>
+                    <CardHeader className="relative">
+                        <CardTitle>Edit Property (Admin)</CardTitle>
+                        <CardDescription>Editing: {property.title}</CardDescription>
+                        <div className="absolute top-4 right-4">
+                            <Link href="/admin/properties">
+                                <Button variant="outline">Cancel</Button>
+                            </Link>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <Label htmlFor="title">Title</Label>
                         <Input
@@ -305,7 +316,9 @@ export default function AdminPropertyEdit({ property, amenities }: AdminProperty
 
                     <Button type="submit" disabled={processing}>Update Property</Button>
                 </form>
-            </div>
-        </AppLayout>
+            </CardContent>
+        </Card>
+    </div>
+</AppLayout>
     );
 }
