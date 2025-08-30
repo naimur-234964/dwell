@@ -31,10 +31,6 @@ export default function ImageUpload({ onImagesChange, existingImages = [], onExi
     const [newImages, setNewImages] = useState<File[]>([]);
     const [currentExistingImages, setCurrentExistingImages] = useState<PropertyImage[]>(existingImages);
 
-    useEffect(() => {
-        setCurrentExistingImages(existingImages);
-    }, [existingImages]);
-
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {

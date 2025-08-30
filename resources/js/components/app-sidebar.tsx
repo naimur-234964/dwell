@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react'; // Added usePage
-import { BookOpen, Folder, LayoutGrid, Home, Building, MapPin, Sparkles, CalendarCheck, CreditCard, Image, MessageSquare, Users, Github, BookText } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Home, Building, MapPin, Sparkles, CalendarCheck, CreditCard, Image, MessageSquare, Users, Github, BookText, Pin } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -25,9 +25,14 @@ export function AppSidebar() {
                 icon: Building,
             },
             {
+                title: 'Locations',
+                href: '/admin/locations',
+                icon: MapPin,
+            },
+            {
                 title: 'Addresses',
                 href: '/admin/addresses',
-                icon: MapPin,
+                icon: Pin,
             },
             {
                 title: 'Amenities',
@@ -79,7 +84,7 @@ export function AppSidebar() {
             {
                 title: 'My Addresses',
                 href: '/host/addresses',
-                icon: MapPin,
+                icon: Pin,
             },
             {
                 title: 'My Payments',

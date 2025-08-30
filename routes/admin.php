@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AdminLocationController; // Added
 
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', function () {
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     })->name('properties.create');
 
     Route::resource('properties', App\Http\Controllers\AdminPropertyController::class);
+    Route::resource('locations', AdminLocationController::class); // Added
     Route::resource('addresses', App\Http\Controllers\AdminAddressController::class);
     Route::resource('amenities', App\Http\Controllers\AdminAmenityController::class);
     Route::resource('bookings', App\Http\Controllers\AdminBookingController::class);
