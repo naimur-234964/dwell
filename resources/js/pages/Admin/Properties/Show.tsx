@@ -1,14 +1,12 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, Link } from '@inertiajs/react';
-import { type Property } from '@/types';
+import { Amenity, Property, Address } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
-import { type Address } from '@/types'; // Import Address type
-
 interface AdminPropertyShowProps {
-    property: Property & { address: Address }; // Extend Property type to include address
+    property: Property & { address: Address; amenities: Amenity[] };
 }
 
 export default function AdminPropertyShow({ property }: AdminPropertyShowProps) {
@@ -41,6 +39,17 @@ export default function AdminPropertyShow({ property }: AdminPropertyShowProps) 
                                 <p className="col-span-1"><strong>Number of Bedrooms:</strong></p><p className="col-span-3">{property.number_of_bedrooms}</p>
                                 <p className="col-span-1"><strong>Number of Beds:</strong></p><p className="col-span-3">{property.number_of_beds}</p>
                                 <p className="col-span-1"><strong>Number of Bathrooms:</strong></p><p className="col-span-3">{property.number_of_bathrooms}</p>
+                            </div>
+                        </div>
+
+                        <Separator />
+
+                        <div>
+                            <h3 className="text-lg font-semibold mb-2">Amenities</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {property.amenities.map((amenity) => (
+                                    <span key={amenity.id} className="bg-gray-200 rounded-md px-2 py-1 text-sm">{amenity.name}</span>
+                                ))}
                             </div>
                         </div>
 

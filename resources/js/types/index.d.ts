@@ -41,6 +41,36 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
+export interface Amenity {
+    id: number;
+    name: string;
+}
+
+export interface Address {
+    id: number;
+    address_line_1: string;
+    address_line_2?: string;
+    city: string;
+    state: string;
+    zip_code: string;
+    country: string;
+}
+
+export interface Property {
+    id: number;
+    user_id: number;
+    title: string;
+    description: string;
+    price_per_night: number;
+    number_of_guests: number;
+    number_of_bedrooms: number;
+    number_of_beds: number;
+    number_of_bathrooms: number;
+    is_available: boolean;
+    address: Address;
+    amenities: Amenity[];
+}
+
 declare global {
     interface Window {
         route: (...args: any[]) => string;

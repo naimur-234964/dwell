@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Address; // Import Address model
+use App\Models\Amenity; // Import Amenity model
 use Inertia\Inertia;
 
 class AdminPropertyController extends Controller
@@ -23,7 +24,8 @@ class AdminPropertyController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Properties/Create');
+        $amenities = Amenity::all();
+        return Inertia::render('Admin/Properties/Create', ['amenities' => $amenities]);
     }
 
     /**
@@ -49,6 +51,10 @@ class AdminPropertyController extends Controller
             'state' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+
+            // Amenities field
+            'amenities' => 'array',
+            'amenities.*' => 'exists:amenities,id',
         ]);
 
         $property = Property::create([
@@ -72,6 +78,9 @@ class AdminPropertyController extends Controller
             'country' => $validatedData['country'],
         ]);
 
+        // Sync amenities
+        $property->amenities()->sync($validatedData['amenities'] ?? []);
+
         return redirect()->route('admin.properties.index')->with('success', 'Property created successfully.');
     }
 
@@ -80,7 +89,7 @@ class AdminPropertyController extends Controller
      */
     public function show(Property $property)
     {
-        $property->load('address'); // Eager load the address relationship
+        $property->load('address', 'amenities'); // Eager load the address relationship
         return Inertia::render('Admin/Properties/Show', ['property' => $property]);
     }
 
@@ -89,8 +98,12 @@ class AdminPropertyController extends Controller
      */
     public function edit(Property $property)
     {
-        $property->load('address'); // Eager load the address relationship
-        return Inertia::render('Admin/Properties/Edit', ['property' => $property]);
+        $property->load('address', 'amenities'); // Eager load address and amenities relationships
+        $amenities = Amenity::all(); // Get all available amenities
+        return Inertia::render('Admin/Properties/Edit', [
+            'property' => $property,
+            'amenities' => $amenities,
+        ]);
     }
 
     /**
@@ -116,6 +129,10 @@ class AdminPropertyController extends Controller
             'state' => 'required|string|max:255',
             'zip_code' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+
+            // Amenities field
+            'amenities' => 'array',
+            'amenities.*' => 'exists:amenities,id',
         ]);
 
         $property->update([
@@ -139,6 +156,9 @@ class AdminPropertyController extends Controller
             'zip_code' => $validatedData['zip_code'],
             'country' => $validatedData['country'],
         ]);
+
+        // Sync amenities
+        $property->amenities()->sync($validatedData['amenities'] ?? []);
 
         return redirect()->route('admin.properties.index')->with('success', 'Property updated successfully.');
     }

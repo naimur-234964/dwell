@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Amenity } from '@/types';
+import { useState } from 'react';
 
-export default function AdminPropertyCreate() {
+export default function AdminPropertyCreate({ amenities }: { amenities: Amenity[] }) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
         description: '',
@@ -17,14 +19,32 @@ export default function AdminPropertyCreate() {
         number_of_bathrooms: '',
         is_available: true,
         user_id: '', // Admin can assign to any user
-        // Address fields
         address_line_1: '',
         address_line_2: '',
         city: '',
         state: '',
         zip_code: '',
         country: '',
+        amenities: [] as number[],
     });
+
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleAmenityChange = (amenityId: number) => {
+        const currentAmenities = data.amenities;
+        if (currentAmenities.includes(amenityId)) {
+            setData(
+                'amenities',
+                currentAmenities.filter((id) => id !== amenityId),
+            );
+        } else {
+            setData('amenities', [...currentAmenities, amenityId]);
+        }
+    };
+
+    const filteredAmenities = amenities.filter((amenity) =>
+        amenity.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -142,6 +162,57 @@ export default function AdminPropertyCreate() {
                         />
                         {errors.user_id && <p className="text-red-500 text-sm">{errors.user_id}</p>}
                     </div>
+
+                    {/* Amenities */}
+                    <div>
+                        <Label htmlFor="amenities">Amenities</Label>
+                        <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+                            {data.amenities.map((amenityId) => {
+                                const amenity = amenities.find((a) => a.id === amenityId);
+                                return (
+                                    <div
+                                        key={amenityId}
+                                        className="flex items-center gap-2 bg-gray-200 rounded-md px-2 py-1"
+                                    >
+                                        <span>{amenity?.name}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAmenityChange(amenityId)}
+                                            className="text-red-500 hover:text-red-700"
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                            <Input
+                                id="amenities"
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Search amenities..."
+                                className="border-0 focus:ring-0"
+                            />
+                        </div>
+                        {searchTerm && (
+                            <div className="border rounded-md mt-1">
+                                {filteredAmenities.map((amenity) => (
+                                    <div
+                                        key={amenity.id}
+                                        onClick={() => {
+                                            handleAmenityChange(amenity.id);
+                                            setSearchTerm('');
+                                        }}
+                                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                                    >
+                                        {amenity.name}
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {errors.amenities && <p className="text-red-500 text-sm">{errors.amenities}</p>}
+                    </div>
+
 
                     {/* Address Fields */}
                     <h2 className="text-xl font-bold mt-6 mb-4">Address Details</h2>
