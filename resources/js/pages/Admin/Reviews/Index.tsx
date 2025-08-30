@@ -24,8 +24,8 @@ export default function AdminReviewIndex({ reviews }: AdminReviewIndexProps) { /
 
     const filteredReviews = reviews.data.filter(review => // Changed from filteredProperties to filteredReviews and property to review
         // TODO: Customize search fields for Review model
-        review.id.toString().includes(searchTerm.toLowerCase()) ||
-        review.comment.toLowerCase().includes(searchTerm.toLowerCase())
+        (review.id?.toString() || '').includes(searchTerm.toLowerCase()) ||
+        (review.comment?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -96,7 +96,7 @@ export default function AdminReviewIndex({ reviews }: AdminReviewIndexProps) { /
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No reviews found matching your search.</p> {/* Changed from No properties to No reviews */}
+                    <p>No reviews found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -104,15 +104,17 @@ export default function AdminReviewIndex({ reviews }: AdminReviewIndexProps) { /
                         Showing {reviews.from} to {reviews.to} of {reviews.total} entries {/* Changed from properties to reviews */}
                     </div>
                     <div className="flex gap-2">
-                        {reviews.links.map((link, index) => ( {/* Changed from properties to reviews */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {reviews.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

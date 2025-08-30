@@ -17,4 +17,8 @@ Route::middleware(['auth', 'verified', 'role:customer'])->prefix('customer')->na
             'pageContent' => 'customer.bookings',
         ]);
     })->name('bookings');
+
+    Route::resource('bookings', App\Http\Controllers\CustomerBookingController::class);
+    Route::resource('payments', App\Http\Controllers\CustomerPaymentController::class);
+    Route::resource('reviews', App\Http\Controllers\CustomerReviewController::class);
 });

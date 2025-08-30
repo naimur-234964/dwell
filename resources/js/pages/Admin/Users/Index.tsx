@@ -24,8 +24,8 @@ export default function AdminUserIndex({ users }: AdminUserIndexProps) { // Chan
 
     const filteredUsers = users.data.filter(user => // Changed from filteredProperties to filteredUsers and property to user
         // TODO: Customize search fields for User model
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (user.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -94,7 +94,7 @@ export default function AdminUserIndex({ users }: AdminUserIndexProps) { // Chan
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No users found matching your search.</p> {/* Changed from No properties to No users */}
+                    <p>No users found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -102,15 +102,17 @@ export default function AdminUserIndex({ users }: AdminUserIndexProps) { // Chan
                         Showing {users.from} to {users.to} of {users.total} entries {/* Changed from properties to users */}
                     </div>
                     <div className="flex gap-2">
-                        {users.links.map((link, index) => ( {/* Changed from properties to users */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {users.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

@@ -24,8 +24,8 @@ export default function CustomerPaymentIndex({ payments }: CustomerPaymentIndexP
 
     const filteredPayments = payments.data.filter(payment => // Changed from filteredProperties to filteredPayments and property to payment
         // TODO: Customize search fields for Payment model
-        payment.id.toString().includes(searchTerm.toLowerCase()) ||
-        payment.amount.toString().includes(searchTerm.toLowerCase())
+        (payment.id?.toString() || '').includes(searchTerm.toLowerCase()) ||
+        (payment.amount?.toString() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -96,7 +96,7 @@ export default function CustomerPaymentIndex({ payments }: CustomerPaymentIndexP
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No payments found matching your search.</p> {/* Changed from No properties to No payments */}
+                    <p>No payments found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -104,15 +104,17 @@ export default function CustomerPaymentIndex({ payments }: CustomerPaymentIndexP
                         Showing {payments.from} to {payments.to} of {payments.total} entries {/* Changed from properties to payments */}
                     </div>
                     <div className="flex gap-2">
-                        {payments.links.map((link, index) => ( {/* Changed from properties to payments */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {payments.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

@@ -23,8 +23,8 @@ export default function HostPropertyIndex({ properties }: HostPropertyIndexProps
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredProperties = properties.data.filter(property =>
-        property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        property.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (property.title?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (property.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -108,14 +108,16 @@ export default function HostPropertyIndex({ properties }: HostPropertyIndexProps
                     </div>
                     <div className="flex gap-2">
                         {properties.links.map((link, index) => (
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

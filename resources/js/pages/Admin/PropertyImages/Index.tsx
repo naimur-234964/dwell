@@ -24,8 +24,8 @@ export default function AdminPropertyImageIndex({ propertyImages }: AdminPropert
 
     const filteredPropertyImages = propertyImages.data.filter(propertyImage => // Changed from filteredProperties to filteredPropertyImages and property to propertyImage
         // TODO: Customize search fields for PropertyImage model
-        propertyImage.id.toString().includes(searchTerm.toLowerCase()) ||
-        propertyImage.image_path.toLowerCase().includes(searchTerm.toLowerCase())
+        (propertyImage.id?.toString() || '').includes(searchTerm.toLowerCase()) ||
+        (propertyImage.image_path?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -94,7 +94,7 @@ export default function AdminPropertyImageIndex({ propertyImages }: AdminPropert
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No property images found matching your search.</p> {/* Changed from No properties to No property images */}
+                    <p>No property images found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -102,15 +102,17 @@ export default function AdminPropertyImageIndex({ propertyImages }: AdminPropert
                         Showing {propertyImages.from} to {propertyImages.to} of {propertyImages.total} entries {/* Changed from properties to propertyImages */}
                     </div>
                     <div className="flex gap-2">
-                        {propertyImages.links.map((link, index) => ( {/* Changed from properties to propertyImages */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {propertyImages.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

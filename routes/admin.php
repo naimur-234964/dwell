@@ -20,4 +20,11 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     })->name('properties.create');
 
     Route::resource('properties', App\Http\Controllers\AdminPropertyController::class);
+    Route::resource('addresses', App\Http\Controllers\AdminAddressController::class);
+    Route::resource('amenities', App\Http\Controllers\AdminAmenityController::class);
+    Route::resource('bookings', App\Http\Controllers\AdminBookingController::class);
+    Route::resource('payments', App\Http\Controllers\AdminPaymentController::class);
+    Route::resource('property-images', App\Http\Controllers\AdminPropertyImageController::class);
+    Route::resource('reviews', App\Http\Controllers\AdminReviewController::class);
+    Route::resource('users', App\Http\Controllers\AdminUserController::class);
 });

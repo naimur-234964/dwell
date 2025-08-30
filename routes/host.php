@@ -16,4 +16,8 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host')->name('host
     })->name('properties');
 
     Route::resource('properties', App\Http\Controllers\HostPropertyController::class);
+    Route::resource('bookings', App\Http\Controllers\HostBookingController::class);
+    Route::resource('amenities', App\Http\Controllers\HostAmenityController::class);
+    Route::resource('addresses', App\Http\Controllers\HostAddressController::class);
+    Route::resource('payments', App\Http\Controllers\HostPaymentController::class);
 });

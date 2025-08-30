@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { type Booking } from '@/types'; // Changed from Property to Booking
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { Button } '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Eye, Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 
@@ -24,8 +24,8 @@ export default function AdminBookingIndex({ bookings }: AdminBookingIndexProps) 
 
     const filteredBookings = bookings.data.filter(booking => // Changed from filteredProperties to filteredBookings and property to booking
         // TODO: Customize search fields for Booking model
-        booking.id.toString().includes(searchTerm.toLowerCase()) || // Placeholder: Customize for Booking fields
-        booking.status.toLowerCase().includes(searchTerm.toLowerCase()) // Placeholder: Customize for Booking fields
+        (booking.id?.toString() || '').includes(searchTerm.toLowerCase()) || // Placeholder: Customize for Booking fields
+        (booking.status?.toLowerCase() || '').includes(searchTerm.toLowerCase()) // Placeholder: Customize for Booking fields
     );
 
     const handleDelete = (id: number) => {
@@ -100,7 +100,7 @@ export default function AdminBookingIndex({ bookings }: AdminBookingIndexProps) 
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No bookings found matching your search.</p> {/* Changed from No properties to No bookings */}
+                    <p>No bookings found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -108,15 +108,17 @@ export default function AdminBookingIndex({ bookings }: AdminBookingIndexProps) 
                         Showing {bookings.from} to {bookings.to} of {bookings.total} entries {/* Changed from properties to bookings */}
                     </div>
                     <div className="flex gap-2">
-                        {bookings.links.map((link, index) => ( {/* Changed from properties to bookings */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {bookings.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

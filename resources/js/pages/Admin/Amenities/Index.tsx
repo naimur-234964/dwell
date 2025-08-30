@@ -24,8 +24,8 @@ export default function AdminAmenityIndex({ amenities }: AdminAmenityIndexProps)
 
     const filteredAmenities = amenities.data.filter(amenity => // Changed from filteredProperties to filteredAmenities and property to amenity
         // TODO: Customize search fields for Amenity model
-        amenity.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        amenity.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (amenity.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (amenity.description?.toLowerCase() || '').includes(searchTerm.toLowerCase())
     );
 
     const handleDelete = (id: number) => {
@@ -92,7 +92,7 @@ export default function AdminAmenityIndex({ amenities }: AdminAmenityIndexProps)
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No amenities found matching your search.</p> {/* Changed from No properties to No amenities */}
+                    <p>No amenities found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -100,15 +100,17 @@ export default function AdminAmenityIndex({ amenities }: AdminAmenityIndexProps)
                         Showing {amenities.from} to {amenities.to} of {amenities.total} entries {/* Changed from properties to amenities */}
                     </div>
                     <div className="flex gap-2">
-                        {amenities.links.map((link, index) => ( {/* Changed from properties to amenities */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {amenities.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>

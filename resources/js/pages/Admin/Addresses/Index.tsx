@@ -24,8 +24,8 @@ export default function AdminAddressIndex({ addresses }: AdminAddressIndexProps)
 
     const filteredAddresses = addresses.data.filter(address => // Changed from filteredProperties to filteredAddresses and property to address
         // TODO: Customize search fields for Address model
-        address.street.toLowerCase().includes(searchTerm.toLowerCase()) || // Placeholder: Customize for Address fields
-        address.city.toLowerCase().includes(searchTerm.toLowerCase()) // Placeholder: Customize for Address fields
+        (address.street?.toLowerCase() || '').includes(searchTerm.toLowerCase()) || // Placeholder: Customize for Address fields
+        (address.city?.toLowerCase() || '').includes(searchTerm.toLowerCase()) // Placeholder: Customize for Address fields
     );
 
     const handleDelete = (id: number) => {
@@ -96,7 +96,7 @@ export default function AdminAddressIndex({ addresses }: AdminAddressIndexProps)
                         </TableBody>
                     </Table>
                 ) : (
-                    <p>No addresses found matching your search.</p> {/* Changed from No properties to No addresses */}
+                    <p>No addresses found matching your search.</p>
                 )}
 
                 <div className="flex justify-between items-center mt-4">
@@ -104,15 +104,17 @@ export default function AdminAddressIndex({ addresses }: AdminAddressIndexProps)
                         Showing {addresses.from} to {addresses.to} of {addresses.total} entries {/* Changed from properties to addresses */}
                     </div>
                     <div className="flex gap-2">
-                        {addresses.links.map((link, index) => ( {/* Changed from properties to addresses */}
-                            <Link
-                                key={index}
-                                href={link.url || '#'}
-                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                preserveScroll
-                            >
-                                {link.label.replace(/&laquo;|&raquo;/g, '')}
-                            </Link>
+                        {addresses.links.map((link, index) => (
+                            <>
+                                <Link
+                                    key={index}
+                                    href={link.url || '#'}
+                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    preserveScroll
+                                >
+                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
+                                </Link>
+                            </>
                         ))}
                     </div>
                 </div>
