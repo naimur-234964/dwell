@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 
 interface HostPropertyShowProps {
-    property: Property & { address: Address; amenities: Amenity[] };
+    property: Property & { address: Address; amenities: Amenity[]; property_images: PropertyImage[] };
 }
 
 export default function HostPropertyShow({ property }: HostPropertyShowProps) {
@@ -18,6 +18,18 @@ export default function HostPropertyShow({ property }: HostPropertyShowProps) {
                     <CardHeader>
                         <CardTitle>Property Details (Host)</CardTitle>
                         <CardDescription>Information about {property.title}</CardDescription>
+                    {property.property_images && property.property_images.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-4">
+                            {property.property_images.map((image) => (
+                                <img
+                                    key={image.id}
+                                    src={`/storage/${image.image_path}`}
+                                    alt={property.title}
+                                    className="w-[300px] h-64 object-cover rounded-md"
+                                />
+                            ))}
+                        </div>
+                    )}
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
@@ -25,7 +37,7 @@ export default function HostPropertyShow({ property }: HostPropertyShowProps) {
                             <div className="grid grid-cols-4 gap-x-4 gap-y-2">
                                 <p className="col-span-1"><strong>Title:</strong></p><p className="col-span-3">{property.title}</p>
                                 <p className="col-span-1"><strong>Description:</strong></p><p className="col-span-3">{property.description}</p>
-                                <p className="col-span-1"><strong>Price per Night:</strong></p><p>${property.price_per_night}</p>
+                                <p className="col-span-1"><strong>Price per Night:</strong></p><p className="col-span-3">${property.price_per_night}</p>
                                 <p className="col-span-1"><strong>Is Available:</strong></p><p className="col-span-3">{property.is_available ? 'Yes' : 'No'}</p>
                             </div>
                         </div>

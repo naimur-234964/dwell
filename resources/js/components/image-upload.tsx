@@ -110,9 +110,9 @@ export default function ImageUpload({ onImagesChange, existingImages = [], onExi
                     items={allImagesToDisplay.map((item) => (item instanceof File ? item.name : item.id))}
                     strategy={rectSortingStrategy}
                 >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="flex flex-wrap gap-4">
                         {allImagesToDisplay.map((item) => (
-                            <SortableItem key={item instanceof File ? item.name : item.id} id={item instanceof File ? item.name : item.id}>
+                            <SortableItem key={item instanceof File ? item.name : item.id} id={item instanceof File ? item.name : item.id} className="w-full md:w-[200px]">
                                 <div className="relative">
                                     <img
                                         src={getImagePreview(item)}

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 
 interface AdminPropertyShowProps {
-    property: Property & { address: Address; amenities: Amenity[] };
+    property: Property & { address: Address; amenities: Amenity[]; property_images: PropertyImage[] };
 }
 
 export default function AdminPropertyShow({ property }: AdminPropertyShowProps) {
@@ -18,6 +18,18 @@ export default function AdminPropertyShow({ property }: AdminPropertyShowProps) 
                     <CardHeader>
                         <CardTitle>Property Details (Admin)</CardTitle>
                         <CardDescription>Information about {property.title}</CardDescription>
+                        {property.property_images && property.property_images.length > 0 && (
+                            <div className="mt-4 flex flex-wrap gap-4">
+                                {property.property_images.map((image) => (
+                                    <img
+                                        key={image.id}
+                                        src={`/storage/${image.image_path}`}
+                                        alt={property.title}
+                                        className="w-[300px] h-64 object-cover rounded-md"
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
