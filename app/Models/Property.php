@@ -9,6 +9,18 @@ class Property extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_id',
+        'title',
+        'description',
+        'price_per_night',
+        'number_of_guests',
+        'number_of_bedrooms',
+        'number_of_beds',
+        'number_of_bathrooms',
+        'is_available',
+    ];
+
     public function amenities()
     {
         return $this->belongsToMany(Amenity::class, 'property_amenities');
