@@ -4,6 +4,7 @@ import { type Property } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Eye, Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 interface HostPropertyIndexProps {
@@ -80,17 +81,17 @@ export default function HostPropertyIndex({ properties }: HostPropertyIndexProps
                                     <TableCell>{property.is_available ? 'Yes' : 'No'}</TableCell>
                                     <TableCell className="flex gap-2">
                                         <Link href={`/host/properties/${property.id}`}>
-                                            <Button variant="outline" size="sm">View</Button>
+                                            <Button variant="outline" size="icon"><Eye className="h-4 w-4" /></Button>
                                         </Link>
                                         <Link href={`/host/properties/${property.id}/edit`}>
-                                            <Button variant="outline" size="sm">Edit</Button>
+                                            <Button variant="outline" size="icon"><Pencil className="h-4 w-4" /></Button>
                                         </Link>
                                         <Button
                                             variant="destructive"
-                                            size="sm"
+                                            size="icon"
                                             onClick={() => handleDelete(property.id)}
                                         >
-                                            Delete
+                                            <Trash className="h-4 w-4" />
                                         </Button>
                                     </TableCell>
                                 </TableRow>
