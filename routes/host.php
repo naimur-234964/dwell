@@ -12,9 +12,8 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host')->name('host
 
     // Host specific routes
     Route::get('dashboard/properties', function () {
-        return Inertia::render('dashboard', [
-            'userRole' => auth()->user()->role,
-            'pageContent' => 'host.properties',
-        ]);
+        return Inertia::render('Host/Properties/Index');
     })->name('properties');
+
+    Route::resource('properties', App\Http\Controllers\HostPropertyController::class);
 });

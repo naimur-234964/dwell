@@ -12,16 +12,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
 
     // Admin specific routes
     Route::get('dashboard/properties', function () {
-        return Inertia::render('dashboard', [
-            'userRole' => auth()->user()->role,
-            'pageContent' => 'admin.properties',
-        ]);
+        return Inertia::render('Admin/Properties/Index');
     })->name('properties');
 
     Route::get('dashboard/properties/create', function () {
-        return Inertia::render('dashboard', [
-            'userRole' => auth()->user()->role,
-            'pageContent' => 'admin.properties.create',
-        ]);
+        return Inertia::render('Admin/Properties/Create'); // Assuming you'll create this page
     })->name('properties.create');
+
+    Route::resource('properties', App\Http\Controllers\AdminPropertyController::class);
 });
