@@ -5,7 +5,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react'; // Added usePage
-import { BookOpen, Folder, LayoutGrid, Home, Building, MapPin, Sparkles, CalendarCheck, CreditCard, Image, MessageSquare, Users, Github, BookText, Pin } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Home, Building, MapPin, Sparkles, CalendarCheck, CreditCard, Image, MessageSquare, Users, Github, BookText, Pin, TicketPercent } from 'lucide-react';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
@@ -67,7 +67,7 @@ export function AppSidebar() {
             {
                 title: 'Coupons',
                 href: '/admin/coupons',
-                icon: CreditCard,
+                icon: TicketPercent,
             },
         ] : []),
         ...(userRole === 'host' ? [
@@ -99,7 +99,7 @@ export function AppSidebar() {
             {
                 title: 'My Coupons',
                 href: '/host/coupons',
-                icon: CreditCard,
+                icon: TicketPercent,
             },
         ] : []),
         ...(userRole === 'customer' ? [
@@ -121,18 +121,7 @@ export function AppSidebar() {
         ] : []),
     ];
 
-    const footerNavItems: NavItem[] = [
-        {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: Github,
-        },
-        {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookText,
-        },
-    ];
+    
 
     return (
         <Sidebar collapsible="icon" variant="inset">
@@ -153,7 +142,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
