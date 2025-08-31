@@ -70,6 +70,7 @@ export interface Property {
     is_available: boolean;
     address: Address;
     amenities: Amenity[];
+    bookings_count?: number;
 }
 
 export interface Location {

@@ -16,11 +16,14 @@ class BookingFactory extends Factory
      */
     public function definition(): array
     {
+        $checkIn = $this->faker->dateTimeBetween('-2 months', '+1 month');
+        $checkOut = (clone $checkIn)->modify('+' . $this->faker->numberBetween(1, 14) . ' days');
+
         return [
             'property_id' => \App\Models\Property::factory(),
             'customer_id' => \App\Models\User::factory(),
-            'check_in_date' => $this->faker->dateTimeBetween('now', '+1 month'),
-            'check_out_date' => $this->faker->dateTimeBetween('+1 month', '+2 months'),
+            'check_in_date' => $checkIn,
+            'check_out_date' => $checkOut,
             'total_price' => $this->faker->randomFloat(2, 100, 5000),
             'status' => $this->faker->randomElement(['pending', 'confirmed', 'cancelled', 'completed']),
         ];

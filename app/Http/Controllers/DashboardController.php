@@ -107,4 +107,48 @@ class DashboardController extends Controller
 
         return response()->json($recentBookings);
     }
+
+    public function adminTopProperties()
+    {
+        $topProperties = Property::withCount('bookings')
+            ->orderBy('bookings_count', 'desc')
+            ->take(5)
+            ->get();
+
+        return response()->json($topProperties);
+    }
+
+    public function adminOccupancyRate()
+    {
+        $days = 30;
+        $startDate = Carbon::now()->subDays($days);
+        $endDate = Carbon::now();
+
+        $totalProperties = Property::count();
+        $totalAvailableNights = $totalProperties * $days;
+
+        $bookedNights = Booking::whereIn('status', ['confirmed', 'completed'])
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('check_in_date', [$startDate, $endDate])
+                    ->orWhereBetween('check_out_date', [$startDate, $endDate]);
+            })
+            ->get()
+            ->sum(function ($booking) use ($startDate, $endDate) {
+                $checkIn = Carbon::parse($booking->check_in_date);
+                $checkOut = Carbon::parse($booking->check_out_date);
+
+                $start = $checkIn->isAfter($startDate) ? $checkIn : $startDate;
+                $end = $checkOut->isBefore($endDate) ? $checkOut : $endDate;
+
+                return $start->diffInDays($end);
+            });
+
+        if ($totalAvailableNights == 0) {
+            return response()->json(['occupancy_rate' => 0]);
+        }
+
+        $occupancyRate = ($bookedNights / $totalAvailableNights) * 100;
+
+        return response()->json(['occupancy_rate' => round($occupancyRate, 2)]);
+    }
 }

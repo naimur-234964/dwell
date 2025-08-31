@@ -1,4 +1,5 @@
 import { RecentActivities } from '@/components/recent-activities';
+import { TopProperties } from '@/components/top-properties';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
@@ -34,6 +35,8 @@ export default function Dashboard() {
         revenuesMonthly: [],
         bookingStatuses: [], // Added
         recentActivities: [], // Added
+        topProperties: [], // Added
+        occupancyRate: 0, // Added
     });
 
     const [hostData, setHostData] = useState({
@@ -50,22 +53,26 @@ export default function Dashboard() {
             setError(null);
             try {
                 if (userRole === 'admin') {
-                    const [paymentsRes, bookingsRes, customersRes, revenuesRes, bookingStatusesRes, recentActivitiesRes] = await Promise.all([ // Added bookingStatusesRes
+                    const [paymentsRes, bookingsRes, customersRes, revenuesRes, bookingStatusesRes, recentActivitiesRes, topPropertiesRes, occupancyRateRes] = await Promise.all([ // Added bookingStatusesRes
                         fetch(window.route('admin.dashboard.payments-monthly')),
                         fetch(window.route('admin.dashboard.bookings-trend')),
                         fetch(window.route('admin.dashboard.customers-count')),
                         fetch(window.route('admin.dashboard.revenues-monthly')),
                         fetch(window.route('admin.dashboard.booking-statuses')), // Added booking-statuses fetch
                         fetch(window.route('admin.dashboard.recent-activities')), // Added recent-activities fetch
+                        fetch(window.route('admin.dashboard.top-properties')), // Added top-properties fetch
+                        fetch(window.route('admin.dashboard.occupancy-rate')), // Added occupancy-rate fetch
                     ]);
 
-                    const [paymentsData, bookingsData, customersData, revenuesData, bookingStatusesData, recentActivitiesData] = await Promise.all([ // Added bookingStatusesData
+                    const [paymentsData, bookingsData, customersData, revenuesData, bookingStatusesData, recentActivitiesData, topPropertiesData, occupancyRateData] = await Promise.all([ // Added bookingStatusesData
                         paymentsRes.json(),
                         bookingsRes.json(),
                         customersRes.json(),
                         revenuesRes.json(),
                         bookingStatusesRes.json(), // Added bookingStatusesRes.json()
                         recentActivitiesRes.json(), // Added recentActivitiesRes.json()
+                        topPropertiesRes.json(), // Added topPropertiesRes.json()
+                        occupancyRateRes.json(), // Added occupancyRateRes.json()
                     ]);
 
                     setAdminData({
@@ -84,6 +91,8 @@ export default function Dashboard() {
                         })),
                         bookingStatuses: bookingStatusesData, // Added
                         recentActivities: recentActivitiesData, // Added
+                        topProperties: topPropertiesData, // Added
+                        occupancyRate: occupancyRateData.occupancy_rate, // Added
                     });
                 } else if (userRole === 'host') {
                     const [bookingsRes, paymentsRes] = await Promise.all([
@@ -136,8 +145,16 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {userRole === 'admin' && (
                     <div className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        <div className="lg:col-span-3">
+                        <div className="lg:col-span-2">
                             <RecentActivities recentActivities={adminData.recentActivities} />
+                        </div>
+                        <div className="lg:col-span-1">
+                            <TopProperties topProperties={adminData.topProperties} />
+                        </div>
+                        {/* Occupancy Rate */}
+                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">
+                            <h2 className="text-xl font-semibold">Occupancy Rate</h2>
+                            <p className="text-5xl font-bold text-green-600">{adminData.occupancyRate}%</p>
                         </div>
                         {/* Total Customers */}
                         <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">

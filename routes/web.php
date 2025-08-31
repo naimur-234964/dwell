@@ -31,6 +31,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')
     Route::get('revenues-monthly', [DashboardController::class, 'adminRevenuesMonthly'])->name('revenues-monthly');
     Route::get('booking-statuses', [DashboardController::class, 'adminBookingStatuses'])->name('booking-statuses'); // Added
     Route::get('recent-activities', [DashboardController::class, 'adminRecentActivities'])->name('recent-activities');
+    Route::get('top-properties', [DashboardController::class, 'adminTopProperties'])->name('top-properties');
+    Route::get('occupancy-rate', [DashboardController::class, 'adminOccupancyRate'])->name('occupancy-rate');
 });
 
 // Host Dashboard API Routes
