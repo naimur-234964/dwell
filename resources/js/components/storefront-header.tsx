@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react'; // Added router
 import { SharedData } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Menu, ShoppingCart, Search, Plane, Car, Building, Ticket, MapPin, DollarSign, Globe, UserCircle, ListPlus } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'; // Added Dropdown components
 
 export function StorefrontHeader() {
     const { auth } = usePage<SharedData>().props;
@@ -36,17 +37,31 @@ export function StorefrontHeader() {
                     </div>
 
                     {auth.user ? (
-                        <Link href="/dashboard">
-                            <Button variant="ghost" className="text-white hover:bg-secondary">
-                                <UserCircle className="h-5 w-5 mr-1" /> Dashboard
-                            </Button>
-                        </Link>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="text-white hover:bg-secondary">
+                                    <UserCircle className="h-5 w-5 mr-1" /> {auth.user.name}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                                <DropdownMenuItem asChild>
+                                    <Link href={route('dashboard')}>Dashboard</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={route('profile.edit')}>Profile</Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => router.post(route('logout'))}>
+                                    Log Out
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ) : (
                         <div className="hidden sm:flex space-x-4">
-                            <Link href="/register">
+                            <Link href={route('register')}>
                                 <Button variant="ghost" className="text-primary bg-white hover:bg-secondary hover:text-white">Register</Button>
                             </Link>
-                            <Link href="/login">
+                            <Link href={route('login')}>
                                 <Button variant="ghost" className="text-primary bg-white hover:bg-secondary hover:text-white">Sign in</Button>
                             </Link>
                         </div>
@@ -72,23 +87,23 @@ export function StorefrontHeader() {
                                     </div>
                                 </div>
                                 <nav className="flex flex-col space-y-4 p-4 flex-grow overflow-y-auto">
-                                    <Link href="/stays" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
+                                    <Link href={route('home')} className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <Building className="h-5 w-5" />
                                         <span>Stays</span>
                                     </Link>
-                                    <Link href="/flights" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
+                                    <Link href={route('flights')} className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <Plane className="h-5 w-5" />
                                         <span>Flights</span>
                                     </Link>
-                                    <Link href="/car-rentals" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
+                                    <Link href={route('car-rentals')} className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <Car className="h-5 w-5" />
                                         <span>Car rentals</span>
                                     </Link>
-                                    <Link href="/attractions" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
+                                    <Link href={route('attractions')} className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <Ticket className="h-5 w-5" />
                                         <span>Attractions</span>
                                     </Link>
-                                    <Link href="/airport-taxis" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
+                                    <Link href={route('airport-taxis')} className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <MapPin className="h-5 w-5" />
                                         <span>Airport taxis</span>
                                     </Link>
@@ -103,17 +118,27 @@ export function StorefrontHeader() {
                                         List your property
                                     </Button>
                                     {auth.user ? (
-                                        <Link href="/dashboard">
-                                            <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start">
-                                                <UserCircle className="h-5 w-5 mr-2" /> Dashboard
+                                        <>
+                                            <Link href={route('dashboard')}>
+                                                <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start">
+                                                    <UserCircle className="h-5 w-5 mr-2" /> Dashboard
+                                                </Button>
+                                            </Link>
+                                            <Link href={route('profile.edit')}>
+                                                <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start">
+                                                    <UserCircle className="h-5 w-5 mr-2" /> Profile
+                                                </Button>
+                                            </Link>
+                                            <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start" onClick={() => router.post(route('logout'))}>
+                                                <UserCircle className="h-5 w-5 mr-2" /> Log Out
                                             </Button>
-                                        </Link>
+                                        </>
                                     ) : (
                                         <>
-                                            <Link href="/register">
+                                            <Link href={route('register')}>
                                                 <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start">Register</Button>
                                             </Link>
-                                            <Link href="/login">
+                                            <Link href={route('login')}>
                                                 <Button variant="ghost" className="text-white hover:bg-secondary w-full justify-start">Sign in</Button>
                                             </Link>
                                         </>
@@ -129,23 +154,23 @@ export function StorefrontHeader() {
             <div className="bg-primary py-3 px-4 lg:px-8 flex flex-row items-center justify-between w-full space-x-2">
                 {/* Desktop Navigation Links */}
                 <nav className="hidden lg:flex space-x-6">
-                    <Link href="/stays" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
+                    <Link href={route('home')} className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
                         <Building className="h-5 w-5" />
                         <span>Stays</span>
                     </Link>
-                    <Link href="/flights" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
+                    <Link href={route('flights')} className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
                         <Plane className="h-5 w-5" />
                         <span>Flights</span>
                     </Link>
-                    <Link href="/car-rentals" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
+                    <Link href={route('car-rentals')} className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
                         <Car className="h-5 w-5" />
                         <span>Car rentals</span>
                     </Link>
-                    <Link href="/attractions" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
+                    <Link href={route('attractions')} className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
                         <Ticket className="h-5 w-5" />
                         <span>Attractions</span>
                     </Link>
-                    <Link href="/airport-taxis" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
+                    <Link href={route('airport-taxis')} className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
                         <MapPin className="h-5 w-5" />
                         <span>Airport taxis</span>
                     </Link>

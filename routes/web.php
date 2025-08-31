@@ -60,6 +60,23 @@ Route::get('/knowledge-base', function () {
     return Inertia::render('KnowledgeBase');
 })->name('knowledge-base');
 
+// Header Pages (Coming Soon)
+Route::get('/flights', function () {
+    return Inertia::render('Flights');
+})->name('flights');
+
+Route::get('/car-rentals', function () {
+    return Inertia::render('CarRentals');
+})->name('car-rentals');
+
+Route::get('/attractions', function () {
+    return Inertia::render('Attractions');
+})->name('attractions');
+
+Route::get('/airport-taxis', function () {
+    return Inertia::render('AirportTaxis');
+})->name('airport-taxis');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard', [
