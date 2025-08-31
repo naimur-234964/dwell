@@ -174,4 +174,45 @@ class DashboardController extends Controller
 
         return response()->json($properties);
     }
+
+    public function hostTotalEarnings()
+    {
+        $hostId = auth()->id();
+        $totalEarnings = Payment::whereHas('booking.property', function ($query) use ($hostId) {
+                $query->where('user_id', $hostId);
+            })
+            ->where('status', 'completed') // Assuming 'completed' status means earned
+            ->sum('amount');
+
+        return response()->json(['total_earnings' => $totalEarnings]);
+    }
+
+    public function hostPendingPayouts()
+    {
+        $hostId = auth()->id();
+        $pendingPayouts = Payment::whereHas('booking.property', function ($query) use ($hostId) {
+                $query->where('user_id', $hostId);
+            })
+            ->where('status', 'completed') // Payments that are completed
+            ->whereHas('booking', function ($query) {
+                $query->where('check_out_date', '<=', Carbon::now()); // Booking has ended
+            })
+            ->sum('amount');
+
+        return response()->json(['pending_payouts' => $pendingPayouts]);
+    }
+
+    public function hostPayoutHistory()
+    {
+        $hostId = auth()->id();
+        $payoutHistory = Payment::whereHas('booking.property', function ($query) use ($hostId) {
+                $query->where('user_id', $hostId);
+            })
+            ->where('status', 'completed') // Assuming 'completed' payments are part of payout history
+            ->with('booking.property', 'booking.customer') // Eager load related data
+            ->latest()
+            ->paginate(10); // Paginate for history
+
+        return response()->json($payoutHistory);
+    }
 }

@@ -10,6 +10,10 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host')->name('host
         ]);
     })->name('dashboard');
 
+    Route::get('dashboard/total-earnings', [App\Http\Controllers\DashboardController::class, 'hostTotalEarnings'])->name('dashboard.total-earnings');
+    Route::get('dashboard/pending-payouts', [App\Http\Controllers\DashboardController::class, 'hostPendingPayouts'])->name('dashboard.pending-payouts');
+    Route::get('dashboard/payout-history', [App\Http\Controllers\DashboardController::class, 'hostPayoutHistory'])->name('dashboard.payout-history');
+
     // Host specific routes
     Route::get('dashboard/properties', function () {
         return Inertia::render('Host/Properties/Index');

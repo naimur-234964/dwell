@@ -43,6 +43,9 @@ export default function Dashboard() {
     const [hostData, setHostData] = useState({
         bookings: [],
         payments: [],
+        totalEarnings: 0,
+        pendingPayouts: 0,
+        payoutHistory: [],
     });
 
     const [loading, setLoading] = useState(true);
@@ -96,19 +99,28 @@ export default function Dashboard() {
                         occupancyRate: occupancyRateData.occupancy_rate, // Added
                     });
                 } else if (userRole === 'host') {
-                    const [bookingsRes, paymentsRes] = await Promise.all([
+                    const [bookingsRes, paymentsRes, totalEarningsRes, pendingPayoutsRes, payoutHistoryRes] = await Promise.all([
                         fetch(window.route('host.dashboard.bookings')),
                         fetch(window.route('host.dashboard.payments')),
+                        fetch(window.route('host.dashboard.total-earnings')),
+                        fetch(window.route('host.dashboard.pending-payouts')),
+                        fetch(window.route('host.dashboard.payout-history')),
                     ]);
 
-                    const [bookingsData, paymentsData] = await Promise.all([
+                    const [bookingsData, paymentsData, totalEarningsData, pendingPayoutsData, payoutHistoryData] = await Promise.all([
                         bookingsRes.json(),
                         paymentsRes.json(),
+                        totalEarningsRes.json(),
+                        pendingPayoutsRes.json(),
+                        payoutHistoryRes.json(),
                     ]);
 
                     setHostData({
                         bookings: bookingsData.data, // Assuming paginated data has a 'data' key
                         payments: paymentsData.data, // Assuming paginated data has a 'data' key
+                        totalEarnings: Number(totalEarningsData.total_earnings) || 0,
+                        pendingPayouts: Number(pendingPayoutsData.pending_payouts) || 0,
+                        payoutHistory: payoutHistoryData.data, // Assuming paginated data has a 'data' key
                     });
                 }
             } catch (err) {
@@ -249,45 +261,25 @@ export default function Dashboard() {
 
                 {userRole === 'host' && (
                     <div className="grid auto-rows-min gap-4 md:grid-cols-1">
-                        <h2 className="text-2xl font-bold">My Bookings</h2>
-                        {hostData.bookings.length > 0 ? (
-                            <div className="overflow-x-auto">
-                                <table className="min-w-full bg-white border border-gray-200 rounded-md">
-                                    <thead>
-                                        <tr>
-                                            <th className="py-2 px-4 border-b">Property</th>
-                                            <th className="py-2 px-4 border-b">Customer</th>
-                                            <th className="py-2 px-4 border-b">Check-in</th>
-                                            <th className="py-2 px-4 border-b">Check-out</th>
-                                            <th className="py-2 px-4 border-b">Total Price</th>
-                                            <th className="py-2 px-4 border-b">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {hostData.bookings.map((booking: any) => (
-                                            <tr key={booking.id}>
-                                                <td className="py-2 px-4 border-b">{booking.property?.title}</td>
-                                                <td className="py-2 px-4 border-b">{booking.customer?.name}</td>
-                                                <td className="py-2 px-4 border-b">{booking.check_in_date}</td>
-                                                <td className="py-2 px-4 border-b">{booking.check_out_date}</td>
-                                                <td className="py-2 px-4 border-b">${booking.total_price}</td>
-                                                <td className="py-2 px-4 border-b">{booking.status}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                        <h2 className="text-2xl font-bold mt-8">Earnings Summary</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">
+                                <h3 className="text-xl font-semibold">Total Earnings</h3>
+                                <p className="text-5xl font-bold text-green-600">${hostData.totalEarnings.toFixed(2)}</p>
                             </div>
-                        ) : (
-                            <p>No bookings found for your properties.</p>
-                        )}
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">
+                                <h3 className="text-xl font-semibold">Pending Payouts</h3>
+                                <p className="text-5xl font-bold text-orange-600">${hostData.pendingPayouts.toFixed(2)}</p>
+                            </div>
+                        </div>
 
-                        <h2 className="text-2xl font-bold mt-8">My Payments</h2>
-                        {hostData.payments.length > 0 ? (
+                        <h2 className="text-2xl font-bold mt-8">Payout History</h2>
+                        {hostData.payoutHistory.length > 0 ? (
                             <div className="overflow-x-auto">
                                 <table className="min-w-full bg-white border border-gray-200 rounded-md">
                                     <thead>
                                         <tr>
-                                            <th className="py-2 px-4 border-b">Booking ID</th>
+                                            <th className="py-2 px-4 border-b">Payment ID</th>
                                             <th className="py-2 px-4 border-b">Property</th>
                                             <th className="py-2 px-4 border-b">Customer</th>
                                             <th className="py-2 px-4 border-b">Amount</th>
@@ -296,12 +288,12 @@ export default function Dashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {hostData.payments.map((payment: any) => (
+                                        {hostData.payoutHistory.map((payment: any) => (
                                             <tr key={payment.id}>
-                                                <td className="py-2 px-4 border-b">{payment.booking?.id}</td>
+                                                <td className="py-2 px-4 border-b">{payment.id}</td>
                                                 <td className="py-2 px-4 border-b">{payment.booking?.property?.title}</td>
                                                 <td className="py-2 px-4 border-b">{payment.booking?.customer?.name}</td>
-                                                <td className="py-2 px-4 border-b">${payment.amount}</td>
+                                                <td className="py-2 px-4 border-b">{payment.amount}</td>
                                                 <td className="py-2 px-4 border-b">{payment.status}</td>
                                                 <td className="py-2 px-4 border-b">{new Date(payment.created_at).toLocaleDateString()}</td>
                                             </tr>
@@ -310,7 +302,7 @@ export default function Dashboard() {
                                 </table>
                             </div>
                         ) : (
-                            <p>No payments found for your properties.</p>
+                            <p>No payout history found.</p>
                         )}
                     </div>
                 )}
