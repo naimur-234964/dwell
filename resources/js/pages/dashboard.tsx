@@ -7,6 +7,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react'; // Added usePage
 import { useEffect, useState } from 'react'; // Added useEffect, useState
 import * as Recharts from 'recharts'; // Recharts components
+import PropertiesMap from '@/components/PropertiesMap'; // Import the new map component
 const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } = Recharts;
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -239,6 +240,10 @@ export default function Dashboard() {
                                 <p className="text-gray-500">No booking status data available.</p>
                             </div>
                         )}
+                        {/* <div className="lg:col-span-3 relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4">
+                            <h2 className="text-xl font-semibold mb-2">Properties Map</h2>
+                            <PropertiesMap />
+                        </div> */}
                     </div>
                 )}
 

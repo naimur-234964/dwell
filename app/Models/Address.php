@@ -17,6 +17,8 @@ class Address extends Model
         'state',
         'zip_code',
         'country',
+        'latitude',
+        'longitude',
     ];
 
     public function property()

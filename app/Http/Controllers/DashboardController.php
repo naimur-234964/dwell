@@ -151,4 +151,27 @@ class DashboardController extends Controller
 
         return response()->json(['occupancy_rate' => round($occupancyRate, 2)]);
     }
+
+    public function adminPropertiesGeoData()
+    {
+        $properties = Property::with('address')
+            ->whereHas('address', function ($query) {
+                $query->whereNotNull('latitude')
+                      ->whereNotNull('longitude');
+            })
+            ->get()
+            ->map(function ($property) {
+                return [
+                    'id' => $property->id,
+                    'title' => $property->title,
+                    'latitude' => $property->address->latitude,
+                    'longitude' => $property->address->longitude,
+                    'price_per_night' => $property->price_per_night,
+                    'city' => $property->address->city,
+                    'country' => $property->address->country,
+                ];
+            });
+
+        return response()->json($properties);
+    }
 }

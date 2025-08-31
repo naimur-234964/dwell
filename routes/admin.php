@@ -11,6 +11,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         ]);
     })->name('dashboard');
 
+    Route::get('dashboard/properties-geo-data', [App\Http\Controllers\DashboardController::class, 'adminPropertiesGeoData'])->name('dashboard.properties-geo-data');
+
     // Admin specific routes
     Route::get('dashboard/properties', function () {
         return Inertia::render('Admin/Properties/Index');
