@@ -86,6 +86,7 @@ export interface Booking {
     user_id: number; // This is the customer_id in the database
     customer_id: number; // Explicitly add customer_id
     customer?: User; // Add customer relationship
+    property?: Partial<Property>; // Add property relationship
     check_in_date: string;
     check_out_date: string;
     total_price: number;

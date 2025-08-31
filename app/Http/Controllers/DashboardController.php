@@ -97,4 +97,14 @@ class DashboardController extends Controller
 
         return response()->json($payments);
     }
+
+    public function adminRecentActivities()
+    {
+        $recentBookings = Booking::with(['property:id,title', 'customer:id,name'])
+            ->latest()
+            ->take(5)
+            ->get(['id', 'property_id', 'customer_id', 'check_in_date', 'check_out_date', 'status', 'created_at']);
+
+        return response()->json($recentBookings);
+    }
 }

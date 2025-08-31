@@ -1,13 +1,12 @@
+import { RecentActivities } from '@/components/recent-activities';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react'; // Added usePage
 import { useEffect, useState } from 'react'; // Added useEffect, useState
-import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-    LineChart, Line, PieChart, Pie, Cell
-} from 'recharts'; // Recharts components
+import * as Recharts from 'recharts'; // Recharts components
+const { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } = Recharts;
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,6 +33,7 @@ export default function Dashboard() {
         customersCount: 0,
         revenuesMonthly: [],
         bookingStatuses: [], // Added
+        recentActivities: [], // Added
     });
 
     const [hostData, setHostData] = useState({
@@ -50,20 +50,22 @@ export default function Dashboard() {
             setError(null);
             try {
                 if (userRole === 'admin') {
-                    const [paymentsRes, bookingsRes, customersRes, revenuesRes, bookingStatusesRes] = await Promise.all([ // Added bookingStatusesRes
+                    const [paymentsRes, bookingsRes, customersRes, revenuesRes, bookingStatusesRes, recentActivitiesRes] = await Promise.all([ // Added bookingStatusesRes
                         fetch(window.route('admin.dashboard.payments-monthly')),
                         fetch(window.route('admin.dashboard.bookings-trend')),
                         fetch(window.route('admin.dashboard.customers-count')),
                         fetch(window.route('admin.dashboard.revenues-monthly')),
                         fetch(window.route('admin.dashboard.booking-statuses')), // Added booking-statuses fetch
+                        fetch(window.route('admin.dashboard.recent-activities')), // Added recent-activities fetch
                     ]);
 
-                    const [paymentsData, bookingsData, customersData, revenuesData, bookingStatusesData] = await Promise.all([ // Added bookingStatusesData
+                    const [paymentsData, bookingsData, customersData, revenuesData, bookingStatusesData, recentActivitiesData] = await Promise.all([ // Added bookingStatusesData
                         paymentsRes.json(),
                         bookingsRes.json(),
                         customersRes.json(),
                         revenuesRes.json(),
                         bookingStatusesRes.json(), // Added bookingStatusesRes.json()
+                        recentActivitiesRes.json(), // Added recentActivitiesRes.json()
                     ]);
 
                     setAdminData({
@@ -81,6 +83,7 @@ export default function Dashboard() {
                             revenue: d.total_revenue,
                         })),
                         bookingStatuses: bookingStatusesData, // Added
+                        recentActivities: recentActivitiesData, // Added
                     });
                 } else if (userRole === 'host') {
                     const [bookingsRes, paymentsRes] = await Promise.all([
@@ -133,6 +136,9 @@ export default function Dashboard() {
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {userRole === 'admin' && (
                     <div className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <div className="lg:col-span-3">
+                            <RecentActivities recentActivities={adminData.recentActivities} />
+                        </div>
                         {/* Total Customers */}
                         <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">
                             <h2 className="text-xl font-semibold">Total Customers</h2>
