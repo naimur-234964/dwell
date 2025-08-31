@@ -7,6 +7,59 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// Footer Pages
+Route::get('/booking', function () {
+    return Inertia::render('Booking');
+})->name('booking');
+
+Route::get('/rental-management', function () {
+    return Inertia::render('RentalManagement');
+})->name('rental-management');
+
+Route::get('/host-support', function () {
+    return Inertia::render('HostSupport');
+})->name('host-support');
+
+Route::get('/about-us', function () {
+    return Inertia::render('AboutUs');
+})->name('about-us');
+
+Route::get('/careers', function () {
+    return Inertia::render('Careers');
+})->name('careers');
+
+Route::get('/press', function () {
+    return Inertia::render('Press');
+})->name('press');
+
+Route::get('/contact-us', function () {
+    return Inertia::render('ContactUs');
+})->name('contact-us');
+
+Route::get('/faqs', function () {
+    return Inertia::render('FAQs');
+})->name('faqs');
+
+Route::get('/terms-and-conditions', function () {
+    return Inertia::render('TermsAndConditions');
+})->name('terms-and-conditions');
+
+Route::get('/privacy-policy', function () {
+    return Inertia::render('PrivacyPolicy');
+})->name('privacy-policy');
+
+Route::get('/cookie-policy', function () {
+    return Inertia::render('CookiePolicy');
+})->name('cookie-policy');
+
+Route::get('/host-faq', function () {
+    return Inertia::render('HostFAQ');
+})->name('host-faq');
+
+Route::get('/knowledge-base', function () {
+    return Inertia::render('KnowledgeBase');
+})->name('knowledge-base');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard', [

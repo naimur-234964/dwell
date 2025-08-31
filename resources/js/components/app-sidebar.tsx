@@ -142,7 +142,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavUser />
+                <NavUser user={usePage().props.auth.user} />
             </SidebarFooter>
         </Sidebar>
     );
