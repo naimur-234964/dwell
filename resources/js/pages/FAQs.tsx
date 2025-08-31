@@ -1,15 +1,17 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const FAQs: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="FAQs" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-6 text-primary">Frequently Asked Questions (FAQs)</h1>
+                <h1 className="text-5xl font-bold mb-6 text-primary">Frequently Asked Questions (FAQs)</h1>
                 <p className="text-lg mb-4">Find answers to common questions about booking, hosting, payments, and more.</p>
                 
                 <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">General Questions</h2>
+                    <h2 className="text-4xl font-semibold mb-3 text-secondary">General Questions</h2>
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-xl font-semibold text-primary">What is Dream Dwell?</h3>
@@ -23,7 +25,7 @@ const FAQs: React.FC = () => {
                 </section>
 
                 <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">Booking Questions</h2>
+                    <h2 className="text-4xl font-semibold mb-3 text-secondary">Booking Questions</h2>
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-xl font-semibold text-primary">How do I book a property?</h3>
@@ -41,7 +43,7 @@ const FAQs: React.FC = () => {
                 </section>
 
                 <section>
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">Hosting Questions</h2>
+                    <h2 className="text-4xl font-semibold mb-3 text-secondary">Hosting Questions</h2>
                     <div className="space-y-4">
                         <div>
                             <h3 className="text-xl font-semibold text-primary">How do I list my property?</h3>

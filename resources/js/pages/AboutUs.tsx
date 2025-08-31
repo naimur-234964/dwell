@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const AboutUs: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="About Us" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">About Dream Dwell</h1>
                 <p className="text-lg mb-4">Dream Dwell was founded with a simple mission: to connect travelers with unique and unforgettable vacation rental experiences. We believe that where you stay is just as important as where you go, and we're dedicated to helping you find the perfect home away from home.</p>

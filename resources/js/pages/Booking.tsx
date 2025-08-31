@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const Booking: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Booking" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Booking Your Dream Stay</h1>
                 <p className="text-lg mb-4">Welcome to the booking page! Here you can find all the information you need to reserve your perfect vacation rental.</p>

@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const TermsAndConditions: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Terms and Conditions" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Terms and Conditions</h1>
                 <p className="text-lg mb-4">Welcome to Dream Dwell. These Terms and Conditions govern your use of our website and services. By accessing or using our platform, you agree to be bound by these terms.</p>

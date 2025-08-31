@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const RentalManagement: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Rental Management" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Rental Management for Hosts</h1>
                 <p className="text-lg mb-4">Manage your properties with ease and maximize your rental income. Dream Dwell provides powerful tools for hosts.</p>

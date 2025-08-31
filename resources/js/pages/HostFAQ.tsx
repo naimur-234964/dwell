@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const HostFAQ: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Host FAQ" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Host Frequently Asked Questions</h1>
                 <p className="text-lg mb-4">Here are some common questions asked by our hosts. If you can't find your answer here, please contact our support team.</p>

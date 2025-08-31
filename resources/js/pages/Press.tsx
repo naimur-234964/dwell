@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const Press: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Press" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Dream Dwell in the News</h1>
                 <p className="text-lg mb-4">Welcome to the Dream Dwell press room. Here you'll find our latest press releases, media kits, and news coverage.</p>

@@ -75,8 +75,8 @@ export function StorefrontHeader() {
                                     <Menu className="h-6 w-6" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-full max-w-xs bg-primary text-white flex flex-col">
-                                <div className="p-4">
+                            <SheetContent side="right" className="w-full max-w-xs bg-primary text-white flex flex-col pt-10">
+                                <div className="p-4 mt-4">
                                     <div className="relative">
                                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary-light" />
                                         <Input

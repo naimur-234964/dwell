@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const CookiePolicy: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Cookie Policy" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Cookie Policy</h1>
                 <p className="text-lg mb-4">This Cookie Policy explains how Dream Dwell uses cookies and similar technologies on our website. By continuing to use our site, you consent to the use of cookies as described in this policy.</p>

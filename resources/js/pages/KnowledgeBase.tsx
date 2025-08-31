@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const KnowledgeBase: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Knowledge Base" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Host Knowledge Base</h1>
                 <p className="text-lg mb-4">Our comprehensive knowledge base provides detailed articles and guides to help you become a successful Dream Dwell host.</p>

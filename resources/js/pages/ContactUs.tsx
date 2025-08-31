@@ -1,9 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
+import { Head } from '@inertiajs/react';
 import React from 'react';
 
 const ContactUs: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Contact Us" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Contact Us</h1>
                 <p className="text-lg mb-4">We'd love to hear from you! Whether you have a question, feedback, or need assistance, our team is here to help.</p>

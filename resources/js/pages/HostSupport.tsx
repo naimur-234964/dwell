@@ -1,10 +1,11 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import React from 'react';
 
 const HostSupport: React.FC = () => {
     return (
         <StorefrontLayout>
+            <Head title="Host Support" />
             <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
                 <h1 className="text-4xl font-bold mb-6 text-primary">Host Support</h1>
                 <p className="text-lg mb-4">At Dream Dwell, we are committed to providing our hosts with exceptional support. Our team is here to assist you with any questions, concerns, or issues you may encounter.</p>
