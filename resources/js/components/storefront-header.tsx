@@ -44,10 +44,10 @@ export function StorefrontHeader() {
                     ) : (
                         <div className="hidden sm:flex space-x-4">
                             <Link href="/register">
-                                <Button variant="ghost" className="text-white hover:bg-secondary">Register</Button>
+                                <Button variant="ghost" className="text-primary bg-white hover:bg-secondary hover:text-white">Register</Button>
                             </Link>
                             <Link href="/login">
-                                <Button variant="ghost" className="text-white hover:bg-secondary">Sign in</Button>
+                                <Button variant="ghost" className="text-primary bg-white hover:bg-secondary hover:text-white">Sign in</Button>
                             </Link>
                         </div>
                     )}
@@ -160,7 +160,7 @@ export function StorefrontHeader() {
                         className="w-full pl-10 pr-4 py-2 rounded-md bg-secondary-dark text-white focus:ring-primary-light focus:border-primary-light"
                     />
                 </div>
-                <Button className="bg-secondary-dark hover:bg-secondary-darker text-white font-bold py-2 px-6 rounded-md w-1/4 lg:w-auto">
+                <Button className="bg-white hover:bg-secondary hover:text-white text-primary font-bold py-2 px-6 rounded-md w-1/4 lg:w-auto">
                     Search
                 </Button>
             </div>
