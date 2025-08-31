@@ -2,7 +2,12 @@ import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react'; // Added usePage
+import { useEffect, useState } from 'react'; // Added useEffect, useState
+import {
+    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+    LineChart, Line, PieChart, Pie, Cell
+} from 'recharts'; // Recharts components
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,27 +16,284 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+// Helper function to format month/year for charts
+const formatMonthYear = (year: number, month: number) => {
+    const date = new Date(year, month - 1); // month - 1 because month is 0-indexed in Date
+    return date.toLocaleString('default', { month: 'short', year: '2-digit' });
+};
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF']; // Colors for Pie Chart
+
 export default function Dashboard() {
+    const { auth } = usePage().props;
+    const userRole = auth.userRole;
+
+    const [adminData, setAdminData] = useState({
+        paymentsMonthly: [],
+        bookingsTrend: [],
+        customersCount: 0,
+        revenuesMonthly: [],
+        bookingStatuses: [], // Added
+    });
+
+    const [hostData, setHostData] = useState({
+        bookings: [],
+        payments: [],
+    });
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                if (userRole === 'admin') {
+                    const [paymentsRes, bookingsRes, customersRes, revenuesRes, bookingStatusesRes] = await Promise.all([ // Added bookingStatusesRes
+                        fetch(window.route('admin.dashboard.payments-monthly')),
+                        fetch(window.route('admin.dashboard.bookings-trend')),
+                        fetch(window.route('admin.dashboard.customers-count')),
+                        fetch(window.route('admin.dashboard.revenues-monthly')),
+                        fetch(window.route('admin.dashboard.booking-statuses')), // Added booking-statuses fetch
+                    ]);
+
+                    const [paymentsData, bookingsData, customersData, revenuesData, bookingStatusesData] = await Promise.all([ // Added bookingStatusesData
+                        paymentsRes.json(),
+                        bookingsRes.json(),
+                        customersRes.json(),
+                        revenuesRes.json(),
+                        bookingStatusesRes.json(), // Added bookingStatusesRes.json()
+                    ]);
+
+                    setAdminData({
+                        paymentsMonthly: paymentsData.map((d: any) => ({
+                            name: formatMonthYear(d.year, d.month),
+                            amount: d.total_amount,
+                        })),
+                        bookingsTrend: bookingsData.map((d: any) => ({
+                            name: formatMonthYear(d.year, d.month),
+                            bookings: d.total_bookings,
+                        })),
+                        customersCount: customersData.total_customers,
+                        revenuesMonthly: revenuesData.map((d: any) => ({
+                            name: formatMonthYear(d.year, d.month),
+                            revenue: d.total_revenue,
+                        })),
+                        bookingStatuses: bookingStatusesData, // Added
+                    });
+                } else if (userRole === 'host') {
+                    const [bookingsRes, paymentsRes] = await Promise.all([
+                        fetch(window.route('host.dashboard.bookings')),
+                        fetch(window.route('host.dashboard.payments')),
+                    ]);
+
+                    const [bookingsData, paymentsData] = await Promise.all([
+                        bookingsRes.json(),
+                        paymentsRes.json(),
+                    ]);
+
+                    setHostData({
+                        bookings: bookingsData.data, // Assuming paginated data has a 'data' key
+                        payments: paymentsData.data, // Assuming paginated data has a 'data' key
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to fetch dashboard data:', err);
+                setError('Failed to load dashboard data.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [userRole]); // Re-fetch data if userRole changes
+
+    if (loading) {
+        return (
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title="Dashboard" />
+                <div className="p-4 text-center">Loading dashboard data...</div>
+            </AppLayout>
+        );
+    }
+
+    if (error) {
+        return (
+            <AppLayout breadcrumbs={breadcrumbs}>
+                <Head title="Dashboard" />
+                <div className="p-4 text-center text-red-500">{error}</div>
+            </AppLayout>
+        );
+    }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                {/* The welcome message and conditional content will be handled by AppSidebar directly */}
+                {userRole === 'admin' && (
+                    <div className="grid auto-rows-min gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {/* Total Customers */}
+                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex flex-col justify-center items-center">
+                            <h2 className="text-xl font-semibold">Total Customers</h2>
+                            <p className="text-5xl font-bold text-blue-600">{adminData.customersCount}</p>
+                        </div>
 
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                        {/* Monthly Payments Bar Chart */}
+                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4">
+                            <h2 className="text-xl font-semibold mb-2">Monthly Payments</h2>
+                            <ResponsiveContainer width="100%" height="80%">
+                                <BarChart data={adminData.paymentsMonthly}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="amount" fill="#8884d8" name="Amount" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Bookings Trend Line Chart */}
+                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4">
+                            <h2 className="text-xl font-semibold mb-2">Bookings Trend</h2>
+                            <ResponsiveContainer width="100%" height="80%">
+                                <LineChart data={adminData.bookingsTrend}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="bookings" stroke="#82ca9d" name="Bookings" />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Monthly Revenues Bar Chart */}
+                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4">
+                            <h2 className="text-xl font-semibold mb-2">Monthly Revenues</h2>
+                            <ResponsiveContainer width="100%" height="80%">
+                                <BarChart data={adminData.revenuesMonthly}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="revenue" fill="#ffc658" name="Revenue" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        {/* Booking Statuses Pie Chart */}
+                        {adminData.bookingStatuses && adminData.bookingStatuses.length > 0 && ( // Added conditional rendering
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4">
+                                <h2 className="text-xl font-semibold mb-2">Booking Statuses</h2>
+                                <ResponsiveContainer width="100%" height="80%">
+                                    <PieChart>
+                                        <Pie
+                                            data={adminData.bookingStatuses}
+                                            cx="50%"
+                                            cy="50%"
+                                            labelLine={false}
+                                            outerRadius={80}
+                                            fill="#8884d8"
+                                            dataKey="count"
+                                            nameKey="status"
+                                            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                        >
+                                            {adminData.bookingStatuses.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                        <Legend />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                        )}
+                        {adminData.bookingStatuses && adminData.bookingStatuses.length === 0 && !loading && ( // Added message for no data
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border p-4 flex items-center justify-center">
+                                <p className="text-gray-500">No booking status data available.</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {userRole === 'host' && (
+                    <div className="grid auto-rows-min gap-4 md:grid-cols-1">
+                        <h2 className="text-2xl font-bold">My Bookings</h2>
+                        {hostData.bookings.length > 0 ? (
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full bg-white border border-gray-200 rounded-md">
+                                    <thead>
+                                        <tr>
+                                            <th className="py-2 px-4 border-b">Property</th>
+                                            <th className="py-2 px-4 border-b">Customer</th>
+                                            <th className="py-2 px-4 border-b">Check-in</th>
+                                            <th className="py-2 px-4 border-b">Check-out</th>
+                                            <th className="py-2 px-4 border-b">Total Price</th>
+                                            <th className="py-2 px-4 border-b">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {hostData.bookings.map((booking: any) => (
+                                            <tr key={booking.id}>
+                                                <td className="py-2 px-4 border-b">{booking.property?.title}</td>
+                                                <td className="py-2 px-4 border-b">{booking.customer?.name}</td>
+                                                <td className="py-2 px-4 border-b">{booking.check_in_date}</td>
+                                                <td className="py-2 px-4 border-b">{booking.check_out_date}</td>
+                                                <td className="py-2 px-4 border-b">${booking.total_price}</td>
+                                                <td className="py-2 px-4 border-b">{booking.status}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p>No bookings found for your properties.</p>
+                        )}
+
+                        <h2 className="text-2xl font-bold mt-8">My Payments</h2>
+                        {hostData.payments.length > 0 ? (
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full bg-white border border-gray-200 rounded-md">
+                                    <thead>
+                                        <tr>
+                                            <th className="py-2 px-4 border-b">Booking ID</th>
+                                            <th className="py-2 px-4 border-b">Property</th>
+                                            <th className="py-2 px-4 border-b">Customer</th>
+                                            <th className="py-2 px-4 border-b">Amount</th>
+                                            <th className="py-2 px-4 border-b">Status</th>
+                                            <th className="py-2 px-4 border-b">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {hostData.payments.map((payment: any) => (
+                                            <tr key={payment.id}>
+                                                <td className="py-2 px-4 border-b">{payment.booking?.id}</td>
+                                                <td className="py-2 px-4 border-b">{payment.booking?.property?.title}</td>
+                                                <td className="py-2 px-4 border-b">{payment.booking?.customer?.name}</td>
+                                                <td className="py-2 px-4 border-b">${payment.amount}</td>
+                                                <td className="py-2 px-4 border-b">{payment.status}</td>
+                                                <td className="py-2 px-4 border-b">{new Date(payment.created_at).toLocaleDateString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        ) : (
+                            <p>No payments found for your properties.</p>
+                        )}
+                    </div>
+                )}
+
+                {userRole === 'customer' && (
+                    <div className="p-4 text-center">
+                        <h2 className="text-2xl font-bold">Customer Dashboard</h2>
+                        <p>Your dashboard content will appear here.</p>
                         <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
                     </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                    </div>
-                </div>
-                <div className="relative min-h-[100vh] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
-                </div>
+                )}
             </div>
         </AppLayout>
     );

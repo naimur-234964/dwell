@@ -20,3 +20,20 @@ require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';
 require __DIR__.'/host.php';
 require __DIR__.'/customer.php';
+
+use App\Http\Controllers\DashboardController; // Added
+
+// Admin Dashboard API Routes
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
+    Route::get('payments-monthly', [DashboardController::class, 'adminPaymentsMonthly'])->name('payments-monthly');
+    Route::get('bookings-trend', [DashboardController::class, 'adminBookingsTrend'])->name('bookings-trend');
+    Route::get('customers-count', [DashboardController::class, 'adminCustomersCount'])->name('customers-count');
+    Route::get('revenues-monthly', [DashboardController::class, 'adminRevenuesMonthly'])->name('revenues-monthly');
+    Route::get('booking-statuses', [DashboardController::class, 'adminBookingStatuses'])->name('booking-statuses'); // Added
+});
+
+// Host Dashboard API Routes
+Route::middleware(['auth', 'verified', 'role:host'])->prefix('host/dashboard')->name('host.dashboard.')->group(function () {
+    Route::get('bookings', [DashboardController::class, 'hostBookings'])->name('bookings');
+    Route::get('payments', [DashboardController::class, 'hostPayments'])->name('payments');
+});

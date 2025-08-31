@@ -70,13 +70,7 @@ export default function AdminAddressIndex({ addresses }: AdminAddressIndexProps)
                         <TableBody>
                             {filteredAddresses.map((address) => ( // Changed from filteredProperties.map((property) to filteredAddresses.map((address)
                                 <TableRow key={address.id}>
-                                    <TableCell>{address.id}</TableCell>
-                                    {/* TODO: Customize table cells for Address model */}
-                                    <TableCell>{address.street}</TableCell>
-                                    <TableCell>{address.city}</TableCell>
-                                    <TableCell>{address.state}</TableCell>
-                                    <TableCell>{address.zip}</TableCell>
-                                    <TableCell className="flex gap-2">
+                                    <TableCell>{address.id}</TableCell><TableCell>{address.street}</TableCell><TableCell>{address.city}</TableCell><TableCell>{address.state}</TableCell><TableCell>{address.zip}</TableCell><TableCell className="flex gap-2">
                                         <Link href={`/admin/addresses/${address.id}`}> {/* Changed from /admin/properties to /admin/addresses */}
                                             <Button variant="outline" size="icon"><Eye className="h-4 w-4" /></Button>
                                         </Link>
@@ -105,16 +99,14 @@ export default function AdminAddressIndex({ addresses }: AdminAddressIndexProps)
                     </div>
                     <div className="flex gap-2">
                         {addresses.links.map((link, index) => (
-                            <>
-                                <Link
-                                    key={index}
-                                    href={link.url || '#'}
-                                    className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                    preserveScroll
-                                >
-                                    {link.label.replace(/&laquo;|&raquo;/g, '')}
-                                </Link>
-                            </>
+                            <Link
+                                key={index} // Key is now on the Link component
+                                href={link.url || '#'}
+                                className={`px-3 py-1 border rounded-md ${link.active ? 'bg-blue-500 text-white' : ''} ${!link.url ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                preserveScroll
+                            >
+                                {link.label.replace(/&laquo;|&raquo;/g, '')}
+                            </Link>
                         ))}
                     </div>
                 </div>

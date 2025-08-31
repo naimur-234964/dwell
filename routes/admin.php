@@ -16,10 +16,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
         return Inertia::render('Admin/Properties/Index');
     })->name('properties');
 
-    Route::get('dashboard/properties/create', function () {
-        return Inertia::render('Admin/Properties/Create'); // Assuming you'll create this page
-    })->name('properties.create');
-
     Route::resource('properties', App\Http\Controllers\AdminPropertyController::class);
     Route::resource('locations', AdminLocationController::class); // Added
     Route::resource('addresses', App\Http\Controllers\AdminAddressController::class);

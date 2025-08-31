@@ -43,6 +43,7 @@ export interface User {
 
 export interface Amenity {
     id: number;
+
     name: string;
 }
 
@@ -97,5 +98,29 @@ export interface Booking {
 declare global {
     interface Window {
         route: (...args: any[]) => string;
+    }
+}
+
+declare module '@inertiajs/core' {
+    interface PageProps {
+        auth: {
+            user: User;
+            userRole: string;
+        };
+        // Add other shared props here if they are always present
+        // e.g., errors: Errors;
+        // flash: { message: string };
+    }
+}
+
+declare module '@inertiajs/react' {
+    interface PageProps {
+        auth: {
+            user: User;
+            userRole: string;
+        };
+        // Add other shared props here if they are always present
+        // e.g., errors: Errors;
+        // flash: { message: string };
     }
 }
