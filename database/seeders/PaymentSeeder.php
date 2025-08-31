@@ -12,6 +12,16 @@ class PaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Payment::factory()->count(10)->create();
+        $bookings = \App\Models\Booking::all();
+
+        foreach ($bookings as $booking) {
+            \App\Models\Payment::factory()->create([
+                'booking_id' => $booking->id,
+                'customer_id' => $booking->customer_id,
+                'amount' => $booking->total_price,
+                'created_at' => $booking->created_at,
+                'updated_at' => $booking->created_at,
+            ]);
+        }
     }
 }

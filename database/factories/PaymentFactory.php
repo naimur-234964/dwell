@@ -17,8 +17,6 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'booking_id' => \App\Models\Booking::factory(),
-            'customer_id' => \App\Models\User::factory(),
             'amount' => $this->faker->randomFloat(2, 50, 2000),
             'advance_amount' => $this->faker->randomFloat(2, 0, 1000),
             'due_amount' => $this->faker->randomFloat(2, 0, 1000),
