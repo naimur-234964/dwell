@@ -12,26 +12,28 @@ export function StorefrontHeader() {
 
     return (
         <header className="bg-primary text-white shadow-lg">
-            <div className="w-7xl mx-auto">
+            <div className="w-full lg:max-w-7xl lg:mx-auto">
             {/* Top Row: Logo and User Actions */}
             <div className="flex items-center justify-between w-full px-4 lg:px-8 py-4">
                 {/* Logo */}
                 <Link href="/" className="flex items-center space-x-2">
                     <AppLogo className="hidden h-10 w-auto text-white sm:block" />
-                    <AppLogoIcon className="block h-10 w-auto text-white sm:hidden" />
+                    {/* <AppLogoIcon className="block h-10 w-auto text-white sm:hidden" /> */}
                 </Link>
 
                 {/* User Actions */}
                 <div className="flex items-center space-x-4">
                     <Button variant="ghost" className="text-white hover:bg-secondary">
-                        <DollarSign className="h-5 w-5 mr-1" /> USD
+                        <DollarSign className="h-4 w-4 mr-1" /> USD
                     </Button>
                     <Button variant="ghost" className="text-white hover:bg-secondary">
-                        <Globe className="h-5 w-5 mr-1" /> EN
+                        <Globe className="h-4 w-4 mr-1" /> EN
                     </Button>
-                    <Button variant="outline" className="bg-white text-primary hover:bg-primary-light">
-                        List your property
-                    </Button>
+                    <div className="hidden lg:block">
+                        <Button variant="outline" className="bg-white text-primary hover:bg-primary-light">
+                            List your property
+                        </Button>
+                    </div>
 
                     {auth.user ? (
                         <Link href="/dashboard">
@@ -40,14 +42,14 @@ export function StorefrontHeader() {
                             </Button>
                         </Link>
                     ) : (
-                        <>
+                        <div className="hidden sm:flex space-x-4">
                             <Link href="/register">
                                 <Button variant="ghost" className="text-white hover:bg-secondary">Register</Button>
                             </Link>
                             <Link href="/login">
                                 <Button variant="ghost" className="text-white hover:bg-secondary">Sign in</Button>
                             </Link>
-                        </>
+                        </div>
                     )}
 
                     {/* Mobile Menu Trigger */}
@@ -58,8 +60,18 @@ export function StorefrontHeader() {
                                     <Menu className="h-6 w-6" />
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-64 bg-primary text-white">
-                                <nav className="flex flex-col space-y-4 pt-8">
+                            <SheetContent side="right" className="w-full max-w-xs bg-primary text-white flex flex-col">
+                                <div className="p-4">
+                                    <div className="relative">
+                                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary-light" />
+                                        <Input
+                                            type="text"
+                                            placeholder="Where are you going?"
+                                            className="w-full pl-10 pr-4 py-2 rounded-md bg-secondary-dark text-white placeholder-primary-light focus:ring-primary-light focus:border-primary-light"
+                                        />
+                                    </div>
+                                </div>
+                                <nav className="flex flex-col space-y-4 p-4 flex-grow overflow-y-auto">
                                     <Link href="/stays" className="flex items-center space-x-2 hover:text-primary-light transition-colors duration-300">
                                         <Building className="h-5 w-5" />
                                         <span>Stays</span>
@@ -87,7 +99,7 @@ export function StorefrontHeader() {
                                     <Button variant="ghost" className="text-white hover:bg-secondary justify-start">
                                         <Globe className="h-5 w-5 mr-2" /> EN
                                     </Button>
-                                    <Button variant="outline" className="bg-white text-primary hover:bg-primary-light w-full">
+                                    <Button variant="outline" className="bg-white text-primary hover:bg-primary-light w-full justify-start">
                                         List your property
                                     </Button>
                                     {auth.user ? (
@@ -114,7 +126,7 @@ export function StorefrontHeader() {
             </div>
 
             {/* Bottom Row: Desktop Navigation Links and Search Bar */}
-            <div className="bg-primary py-3 px-4 lg:px-8 flex flex-col lg:flex-row items-center justify-between w-full">
+            <div className="bg-primary py-3 px-4 lg:px-8 flex flex-row items-center justify-between w-full space-x-2">
                 {/* Desktop Navigation Links */}
                 <nav className="hidden lg:flex space-x-6">
                     <Link href="/stays" className="flex items-center space-x-2 text-white hover:text-primary-light transition-colors duration-300">
@@ -140,7 +152,7 @@ export function StorefrontHeader() {
                 </nav>
 
                 {/* Search Bar */}
-                <div className="relative flex-grow w-full lg:w-auto lg:max-w-md">
+                <div className="relative flex-grow w-3/4 lg:w-auto lg:max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary-light" />
                     <Input
                         type="text"
@@ -148,7 +160,7 @@ export function StorefrontHeader() {
                         className="w-full pl-10 pr-4 py-2 rounded-md bg-secondary-dark text-white focus:ring-primary-light focus:border-primary-light"
                     />
                 </div>
-                <Button className="bg-secondary-dark hover:bg-secondary-darker text-white font-bold py-2 px-6 rounded-md w-full lg:w-auto mt-4 lg:mt-0">
+                <Button className="bg-secondary-dark hover:bg-secondary-darker text-white font-bold py-2 px-6 rounded-md w-1/4 lg:w-auto">
                     Search
                 </Button>
             </div>
