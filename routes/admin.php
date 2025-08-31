@@ -27,4 +27,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::resource('property-images', App\Http\Controllers\AdminPropertyImageController::class);
     Route::resource('reviews', App\Http\Controllers\AdminReviewController::class);
     Route::resource('users', App\Http\Controllers\AdminUserController::class);
+    Route::resource('coupons', App\Http\Controllers\Admin\AdminCouponController::class);
 });

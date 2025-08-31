@@ -24,4 +24,5 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host')->name('host
     Route::resource('amenities', App\Http\Controllers\HostAmenityController::class);
     Route::resource('addresses', App\Http\Controllers\HostAddressController::class);
     Route::resource('payments', App\Http\Controllers\HostPaymentController::class);
+    Route::resource('coupons', App\Http\Controllers\Host\HostCouponController::class);
 });

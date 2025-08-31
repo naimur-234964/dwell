@@ -16,6 +16,7 @@ class Booking extends Model
         'check_out_date',
         'total_price',
         'status',
+        'coupon_id',
     ];
 
     public function property()
@@ -26,5 +27,10 @@ class Booking extends Model
     public function customer()
     {
         return $this->belongsTo(User::class, 'customer_id');
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

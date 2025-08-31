@@ -22,6 +22,8 @@ require __DIR__.'/host.php';
 require __DIR__.'/customer.php';
 
 use App\Http\Controllers\DashboardController; // Added
+use App\Http\Controllers\CouponValidationController; // Added
+use App\Models\Property; // Added
 
 // Admin Dashboard API Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
@@ -40,3 +42,13 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host/dashboard')->
     Route::get('bookings', [DashboardController::class, 'hostBookings'])->name('bookings');
     Route::get('payments', [DashboardController::class, 'hostPayments'])->name('payments');
 });
+
+// Coupon Validation API Route
+Route::get('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');
+
+// Property Booking Demo Route (for testing coupon application)
+Route::get('/book-property-demo/{property}', function (Property $property) {
+    return Inertia::render('Customer/PropertyBookingDemo', [
+        'property' => $property,
+    ]);
+})->name('book-property-demo');

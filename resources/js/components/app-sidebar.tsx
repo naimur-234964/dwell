@@ -64,6 +64,11 @@ export function AppSidebar() {
                 href: '/admin/users',
                 icon: Users,
             },
+            {
+                title: 'Coupons',
+                href: '/admin/coupons',
+                icon: CreditCard,
+            },
         ] : []),
         ...(userRole === 'host' ? [
             {
@@ -89,6 +94,11 @@ export function AppSidebar() {
             {
                 title: 'My Payments',
                 href: '/host/payments',
+                icon: CreditCard,
+            },
+            {
+                title: 'My Coupons',
+                href: '/host/coupons',
                 icon: CreditCard,
             },
         ] : []),

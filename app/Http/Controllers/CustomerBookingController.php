@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Coupon;
+use App\Models\Property;
+use Carbon\Carbon;
 use Inertia\Inertia;
 
 class CustomerBookingController extends Controller
@@ -42,9 +45,45 @@ class CustomerBookingController extends Controller
             'check_out_date' => 'required|date|after:check_in_date',
             'total_price' => 'required|numeric|min:0',
             'status' => 'required|string|max:255',
+            'coupon_id' => 'nullable|exists:coupons,id',
         ]);
 
-        Booking::create(array_merge($validatedData, ['customer_id' => $customerId]));
+        $finalPrice = $validatedData['total_price'];
+        $couponId = null;
+
+        if (isset($validatedData['coupon_id'])) {
+            $coupon = Coupon::find($validatedData['coupon_id']);
+            $property = Property::findOrFail($validatedData['property_id']);
+
+            // Re-validate coupon on backend for security
+            if (!$coupon || $coupon->status === 'inactive' || ($coupon->starts_at && Carbon::now()->lt($coupon->starts_at)) || ($coupon->expires_at && Carbon::now()->gt($coupon->expires_at)) || ($coupon->usage_limit !== null && $coupon->used_count >= $coupon->usage_limit) || ($coupon->user_id !== null && $coupon->user_id !== $property->user_id)) {
+                return redirect()->back()->withErrors(['coupon_code' => 'Invalid or expired coupon.']);
+            }
+
+            $checkIn = Carbon::parse($validatedData['check_in_date']);
+            $checkOut = Carbon::parse($validatedData['check_out_date']);
+            $numberOfNights = $checkIn->diffInDays($checkOut);
+            $originalPrice = $property->price_per_night * $numberOfNights;
+
+            if ($coupon->min_cart_value !== null && $originalPrice < $coupon->min_cart_value) {
+                return redirect()->back()->withErrors(['coupon_code' => 'Minimum cart value not met for this coupon.']);
+            }
+
+            if ($coupon->type === 'fixed') {
+                $finalPrice = max(0, $originalPrice - $coupon->value);
+            } elseif ($coupon->type === 'percentage') {
+                $finalPrice = $originalPrice * (1 - ($coupon->value / 100));
+            }
+
+            $coupon->increment('used_count');
+            $couponId = $coupon->id;
+        }
+
+        Booking::create(array_merge($validatedData, [
+            'customer_id' => $customerId,
+            'total_price' => round($finalPrice, 2),
+            'coupon_id' => $couponId,
+        ]));
 
         return redirect()->route('customer.bookings.index')->with('success', 'Booking created successfully.');
     }
