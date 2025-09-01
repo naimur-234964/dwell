@@ -68,6 +68,11 @@ export function StorefrontFooter() {
                             <p className="font-medium text-gray-900 dark:text-white">Services</p>
                             <ul className="mt-6 space-y-4 text-sm">
                                 <li>
+                                    <Link href={route('services')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
+                                        Services
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link href={route('booking')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
                                         Booking
                                     </Link>
@@ -110,6 +115,11 @@ export function StorefrontFooter() {
                             <p className="font-medium text-gray-900 dark:text-white">Helpful Links</p>
                             <ul className="mt-6 space-y-4 text-sm">
                                 <li>
+                                    <Link href={route('helpful-links')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
+                                        Helpful Links
+                                    </Link>
+                                </li>
+                                <li>
                                     <Link href={route('contact-us')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
                                         Contact Us
                                     </Link>
@@ -130,6 +140,11 @@ export function StorefrontFooter() {
                         <div>
                             <p className="font-medium text-gray-900 dark:text-white">Legal</p>
                             <ul className="mt-6 space-y-4 text-sm">
+                                <li>
+                                    <Link href={route('legal')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
+                                        Legal
+                                    </Link>
+                                </li>
                                 <li>
                                     <Link href={route('privacy-policy')} className="text-gray-700 transition hover:opacity-75 dark:text-gray-200">
                                         Privacy Policy

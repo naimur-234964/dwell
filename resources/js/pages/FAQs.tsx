@@ -1,59 +1,72 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { Head } from '@inertiajs/react';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const FAQs: React.FC = () => {
+    const main = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context((self) => {
+            if (self.selector) {
+                const sections = self.selector('section');
+                sections.forEach((section: any) => {
+                    gsap.fromTo(
+                        section.children,
+                        { y: '+=30', opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            stagger: 0.2,
+                            duration: 1,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: section,
+                                start: 'top 80%',
+                            },
+                        },
+                    );
+                });
+            }
+        }, main);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <StorefrontLayout>
             <Head title="FAQs" />
-            <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
-                <h1 className="text-5xl font-bold mb-6 text-primary">Frequently Asked Questions (FAQs)</h1>
-                <p className="text-lg mb-4">Find answers to common questions about booking, hosting, payments, and more.</p>
-                
-                <section className="mb-8">
-                    <h2 className="text-4xl font-semibold mb-3 text-secondary">General Questions</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">What is Dream Dwell?</h3>
-                            <p className="text-gray-700">Dream Dwell is an online platform that connects travelers with unique vacation rental properties around the world. We offer a wide range of accommodations, from cozy apartments to luxurious villas.</p>
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">How do I create an account?</h3>
-                            <p className="text-gray-700">You can create an account by clicking on the "Sign Up" button in the top right corner of our website and following the simple registration process.</p>
+            <div ref={main} className="w-full text-gray-800">
+                <section className="relative bg-cover bg-center text-white py-32 px-4" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2070&auto=format&fit=crop')" }}>
+                    <div className="relative max-w-4xl mx-auto text-center">
+                        <h1 className="text-5xl md:text-7xl font-extrabold mb-4" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Frequently Asked Questions</h1>
+                        <p className="text-lg md:text-xl" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Find answers to common questions about booking, hosting, and more.</p>
+                    </div>
+                </section>
+
+                {/* FAQ Accordion Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="space-y-4">
+                            <details className="p-6 border rounded-lg bg-white shadow-md">
+                                <summary className="font-semibold cursor-pointer text-xl">What is Dream Dwell?</summary>
+                                <p className="mt-4 text-gray-600">Dream Dwell is an online platform that connects travelers with unique vacation rental properties around the world.</p>
+                            </details>
+                            <details className="p-6 border rounded-lg bg-white shadow-md">
+                                <summary className="font-semibold cursor-pointer text-xl">How do I book a property?</summary>
+                                <p className="mt-4 text-gray-600">Browse properties, select your dates, and click "Book Now."</p>
+                            </details>
                         </div>
                     </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-4xl font-semibold mb-3 text-secondary">Booking Questions</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">How do I book a property?</h3>
-                            <p className="text-gray-700">Browse properties, select your dates, and click "Book Now." Follow the prompts to complete your reservation and payment.</p>
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">What payment methods do you accept?</h3>
-                            <p className="text-gray-700">We accept major credit cards (Visa, MasterCard, American Express) and other secure online payment options.</p>
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">Can I cancel my booking?</h3>
-                            <p className="text-gray-700">Cancellation policies vary by property. Please check the specific listing's cancellation terms before booking. You can find this information on the property details page.</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section>
-                    <h2 className="text-4xl font-semibold mb-3 text-secondary">Hosting Questions</h2>
-                    <div className="space-y-4">
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">How do I list my property?</h3>
-                            <p className="text-gray-700">Sign up as a host, then follow our step-by-step guide to create your property listing. You'll provide details, photos, and set your pricing and availability.</p>
-                        </div>
-                        <div>
-                            <h3 className="text-xl font-semibold text-primary">What are the fees for hosts?</h3>
-                            <p className="text-gray-700">We charge a small commission on confirmed bookings. There are no upfront fees to list your property.</p>
-                        </div>
-                    </div>
+                {/* Still Have Questions Section */}
+                <section className="py-20 px-4 text-center bg-primary text-white">
+                    <h2 className="text-4xl font-bold mb-6">Still Have Questions?</h2>
+                    <p className="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Our support team is here to help. Contact us for any further assistance.</p>
+                    <a href="/contact-us" className="bg-white text-primary font-bold py-3 px-8 rounded-lg hover:bg-gray-200 transition-colors duration-300">Contact Us</a>
                 </section>
             </div>
         </StorefrontLayout>

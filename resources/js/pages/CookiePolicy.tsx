@@ -1,40 +1,79 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { Head } from '@inertiajs/react';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CookiePolicy: React.FC = () => {
+    const main = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context((self) => {
+            if (self.selector) {
+                const sections = self.selector('section');
+                sections.forEach((section: any) => {
+                    gsap.fromTo(
+                        section.children,
+                        { y: '+=30', opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            stagger: 0.2,
+                            duration: 1,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: section,
+                                start: 'top 80%',
+                            },
+                        },
+                    );
+                });
+            }
+        }, main);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <StorefrontLayout>
             <Head title="Cookie Policy" />
-            <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-6 text-primary">Cookie Policy</h1>
-                <p className="text-lg mb-4">This Cookie Policy explains how Dream Dwell uses cookies and similar technologies on our website. By continuing to use our site, you consent to the use of cookies as described in this policy.</p>
-                
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">1. What are Cookies?</h2>
-                    <p className="mb-2">Cookies are small text files that are stored on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently, as well as to provide information to the owners of the site.</p>
+            <div ref={main} className="w-full text-gray-800">
+                <section className="relative bg-cover bg-center text-white py-32 px-4" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop')" }}>
+                    <div className="relative max-w-4xl mx-auto text-center">
+                        <h1 className="text-5xl md:text-7xl font-extrabold mb-4" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Cookie Policy</h1>
+                        <p className="text-lg md:text-xl" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>We use cookies to improve your experience on our site.</p>
+                    </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">2. How We Use Cookies</h2>
-                    <p className="mb-2">We use cookies for various purposes, including:</p>
-                    <ul className="list-disc list-inside space-y-2">
-                        <li>**Essential Cookies:** These are necessary for the website to function properly, enabling core functionalities like security, network management, and accessibility.</li>
-                        <li>**Analytical/Performance Cookies:** These allow us to recognize and count the number of visitors and to see how visitors move around our website when they are using it. This helps us to improve the way our website works.</li>
-                        <li>**Functionality Cookies:** These are used to recognize you when you return to our website. This enables us to personalize our content for you, greet you by name, and remember your preferences.</li>
-                        <li>**Targeting/Advertising Cookies:** These cookies record your visit to our website, the pages you have visited, and the links you have followed. We will use this information to make our website and the advertising displayed on it more relevant to your interests.</li>
-                    </ul>
+                {/* What Are Cookies Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h2 className="text-4xl font-bold mb-6 text-primary">What Are Cookies?</h2>
+                        <p className="text-lg md:text-xl text-gray-600">Cookies are small text files that are stored on your computer or mobile device when you visit a website. They help us provide a better and more personalized experience.</p>
+                    </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">3. Third-Party Cookies</h2>
-                    <p className="mb-2">In addition to our own cookies, we may also use various third-parties cookies to report usage statistics of the Service, deliver advertisements on and through the Service, and so on.</p>
+                {/* How We Use Cookies Section */}
+                <section className="py-16 px-4 lg:px-0 bg-gray-50">
+                    <div className="max-w-7xl mx-auto">
+                        <h2 className="text-4xl font-bold mb-12 text-center text-primary">How We Use Cookies</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <div className="p-8 border border-gray-200 rounded-lg shadow-lg text-center">Essential</div>
+                            <div className="p-8 border border-gray-200 rounded-lg shadow-lg text-center">Analytical</div>
+                            <div className="p-8 border border-gray-200 rounded-lg shadow-lg text-center">Functionality</div>
+                            <div className="p-8 border border-gray-200 rounded-lg shadow-lg text-center">Advertising</div>
+                        </div>
+                    </div>
                 </section>
 
-                <section>
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">4. Your Choices Regarding Cookies</h2>
-                    <p className="mb-2">You have the ability to accept or decline cookies. Most web browsers automatically accept cookies, but you can usually modify your browser setting to decline cookies if you prefer. However, this may prevent you from taking full advantage of the website.</p>
-                    <p className="mt-2">To learn more about how to manage cookies, visit <a href="https://www.allaboutcookies.org" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">allaboutcookies.org</a>.</p>
+                {/* Your Choices Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h2 className="text-4xl font-bold mb-6 text-primary">Your Cookie Choices</h2>
+                        <p className="text-lg md:text-xl text-gray-600 mb-8">You can manage your cookie preferences through your browser settings. However, disabling certain cookies may affect your experience on our site.</p>
+                        <a href="https://www.allaboutcookies.org" target="_blank" rel="noreferrer" className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90">Learn More</a>
+                    </div>
                 </section>
             </div>
         </StorefrontLayout>

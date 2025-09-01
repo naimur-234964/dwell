@@ -1,41 +1,95 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { Head } from '@inertiajs/react';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const Press: React.FC = () => {
+    const main = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context((self) => {
+            if (self.selector) {
+                const sections = self.selector('section');
+                sections.forEach((section: any) => {
+                    gsap.fromTo(
+                        section.children,
+                        { y: '+=30', opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            stagger: 0.2,
+                            duration: 1,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: section,
+                                start: 'top 80%',
+                            },
+                        },
+                    );
+                });
+            }
+        }, main);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <StorefrontLayout>
             <Head title="Press" />
-            <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-6 text-primary">Dream Dwell in the News</h1>
-                <p className="text-lg mb-4">Welcome to the Dream Dwell press room. Here you'll find our latest press releases, media kits, and news coverage.</p>
-                
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">Latest Press Releases</h2>
-                    <div className="space-y-4">
-                        <div className="border p-4 rounded-lg">
-                            <h3 className="text-xl font-semibold mb-2 text-primary">Dream Dwell Announces Expansion into European Markets</h3>
-                            <p className="text-gray-700">[Date]: Dream Dwell, a leading vacation rental platform, today announced its strategic expansion into key European markets, offering travelers an even wider selection of unique accommodations.</p>
-                            <a href="#" className="text-blue-600 hover:underline mt-2 inline-block">Read More</a>
-                        </div>
-                        <div className="border p-4 rounded-lg">
-                            <h3 className="text-xl font-semibold mb-2 text-primary">Dream Dwell Partners with Local Tourism Boards to Promote Sustainable Travel</h3>
-                            <p className="text-gray-700">[Date]: In an effort to promote responsible tourism, Dream Dwell has partnered with several local tourism boards to highlight eco-friendly properties and experiences.</p>
-                            <a href="#" className="text-blue-600 hover:underline mt-2 inline-block">Read More</a>
+            <div ref={main} className="w-full text-gray-800">
+                <section className="relative bg-cover bg-center text-white py-32 px-4" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')" }}>
+                    <div className="relative max-w-4xl mx-auto text-center">
+                        <h1 className="text-5xl md:text-7xl font-extrabold mb-4" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Dream Dwell in the News</h1>
+                        <p className="text-lg md:text-xl" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Sharing our story with the world. Find our latest press releases, media kits, and news coverage here.</p>
+                    </div>
+                </section>
+
+                {/* In the News Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-7xl mx-auto">
+                        <h2 className="text-4xl font-bold mb-12 text-center text-primary">As Featured In</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center items-center">
+                            <div className="grayscale hover:grayscale-0 transition-all">Logo 1</div>
+                            <div className="grayscale hover:grayscale-0 transition-all">Logo 2</div>
+                            <div className="grayscale hover:grayscale-0 transition-all">Logo 3</div>
+                            <div className="grayscale hover:grayscale-0 transition-all">Logo 4</div>
                         </div>
                     </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">Media Kit</h2>
-                    <p className="mb-2">Download our media kit for high-resolution logos, brand guidelines, and company information.</p>
-                    <a href="#" className="text-blue-600 hover:underline">Download Media Kit (PDF)</a>
+                {/* Press Releases Section */}
+                <section className="py-16 px-4 lg:px-0 bg-gray-50">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-4xl font-bold mb-6 text-primary">Latest Press Releases</h2>
+                        <div className="space-y-6">
+                            <div className="p-6 border rounded-lg bg-white shadow-md">...</div>
+                            <div className="p-6 border rounded-lg bg-white shadow-md">...</div>
+                        </div>
+                    </div>
                 </section>
 
-                <section>
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">Media Contact</h2>
-                    <p className="mb-2">For all media inquiries, please contact our press team:</p>
-                    <p>Email: <a href="mailto:press@dreamdwell.com" className="text-blue-600 hover:underline">press@dreamdwell.com</a></p>
+                {/* Media Kit Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h2 className="text-4xl font-bold mb-6 text-primary">Media Kit</h2>
+                        <p className="text-lg md:text-xl text-gray-600 mb-8">Download our official brand assets, including logos, photos, and brand guidelines.</p>
+                        <a href="#" className="bg-primary text-white font-bold py-3 px-8 rounded-lg hover:bg-opacity-90">Download Media Kit</a>
+                    </div>
+                </section>
+
+                {/* Media Contact Section */}
+                <section className="py-16 px-4 lg:px-0 bg-gray-50">
+                    <div className="max-w-4xl mx-auto">
+                        <h2 className="text-4xl font-bold mb-6 text-primary">Media Inquiries</h2>
+                        <form className="bg-white p-8 rounded-lg shadow-lg space-y-4">
+                            <input type="text" placeholder="Name" className="w-full p-4 border rounded" />
+                            <input type="email" placeholder="Email" className="w-full p-4 border rounded" />
+                            <textarea placeholder="Message" className="w-full p-4 border rounded" rows={5}></textarea>
+                            <button type="submit" className="w-full bg-primary text-white font-bold py-4 px-8 rounded hover:bg-opacity-90">Submit</button>
+                        </form>
+                    </div>
                 </section>
             </div>
         </StorefrontLayout>

@@ -6,7 +6,7 @@ export default function StorefrontLayout({ children }: PropsWithChildren) {
     return (
         <div className="min-h-screen flex flex-col">
             <StorefrontHeader />
-            <main className="flex-grow pt-8">                
+            <main className="flex-grow">                
                 {children}
             </main>
             <StorefrontFooter />

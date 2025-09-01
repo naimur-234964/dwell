@@ -8,6 +8,18 @@ Route::get('/', function () {
 })->name('home');
 
 // Footer Pages
+Route::get('/services', function () {
+    return Inertia::render('Services');
+})->name('services');
+
+Route::get('/legal', function () {
+    return Inertia::render('Legal');
+})->name('legal');
+
+Route::get('/helpful-links', function () {
+    return Inertia::render('HelpfulLinks');
+})->name('helpful-links');
+
 Route::get('/booking', function () {
     return Inertia::render('Booking');
 })->name('booking');

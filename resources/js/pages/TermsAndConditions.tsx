@@ -1,43 +1,74 @@
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { Head } from '@inertiajs/react';
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const TermsAndConditions: React.FC = () => {
+    const main = useRef<HTMLDivElement>(null);
+
+    useLayoutEffect(() => {
+        const ctx = gsap.context((self) => {
+            if (self.selector) {
+                const sections = self.selector('section');
+                sections.forEach((section: any) => {
+                    gsap.fromTo(
+                        section.children,
+                        { y: '+=30', opacity: 0 },
+                        {
+                            y: 0,
+                            opacity: 1,
+                            stagger: 0.2,
+                            duration: 1,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: section,
+                                start: 'top 80%',
+                            },
+                        },
+                    );
+                });
+            }
+        }, main);
+        return () => ctx.revert();
+    }, []);
+
     return (
         <StorefrontLayout>
             <Head title="Terms and Conditions" />
-            <div className="w-full lg:max-w-7xl lg:mx-auto px-4 py-8">
-                <h1 className="text-4xl font-bold mb-6 text-primary">Terms and Conditions</h1>
-                <p className="text-lg mb-4">Welcome to Dream Dwell. These Terms and Conditions govern your use of our website and services. By accessing or using our platform, you agree to be bound by these terms.</p>
-                
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">1. Acceptance of Terms</h2>
-                    <p className="mb-2">By using the Dream Dwell platform, you agree to comply with and be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our services.</p>
+            <div ref={main} className="w-full text-gray-800">
+                <section className="relative bg-cover bg-center text-white py-32 px-4" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1556740738-b6a63e27c4df?q=80&w=2070&auto=format&fit=crop')" }}>
+                    <div className="relative max-w-4xl mx-auto text-center">
+                        <h1 className="text-5xl md:text-7xl font-extrabold mb-4" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Terms and Conditions</h1>
+                        <p className="text-lg md:text-xl" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Please read these terms carefully before using our services.</p>
+                    </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">2. Changes to Terms</h2>
-                    <p className="mb-2">Dream Dwell reserves the right to modify or revise these Terms and Conditions at any time. We will notify you of any changes by posting the new Terms and Conditions on this page. Your continued use of the platform after any such changes constitutes your acceptance of the new Terms and Conditions.</p>
+                {/* Terms Content Section */}
+                <section className="py-16 px-4 lg:px-0">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="prose lg:prose-xl">
+                            <h2>1. Acceptance of Terms</h2>
+                            <p>By using the Dream Dwell platform, you agree to comply with and be bound by these Terms and Conditions.</p>
+                            
+                            <h2>2. Changes to Terms</h2>
+                            <p>Dream Dwell reserves the right to modify or revise these Terms and Conditions at any time.</p>
+
+                            {/* Add more terms content here */}
+                        </div>
+                    </div>
                 </section>
 
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">3. User Accounts</h2>
-                    <p className="mb-2">To access certain features of the platform, you may be required to create an account. You are responsible for maintaining the confidentiality of your account information and for all activities that occur under your account.</p>
-                </section>
-
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">4. Booking and Payments</h2>
-                    <p className="mb-2">All bookings made through Dream Dwell are subject to the specific terms and conditions of the property owner or manager. Payments are processed securely through our platform.</p>
-                </section>
-
-                <section className="mb-8">
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">5. Prohibited Conduct</h2>
-                    <p className="mb-2">You agree not to use the platform for any unlawful or prohibited activities, including but not limited to: posting false information, infringing on intellectual property rights, or engaging in any form of harassment.</p>
-                </section>
-
-                <section>
-                    <h2 className="text-2xl font-semibold mb-3 text-primary">6. Disclaimer of Warranties</h2>
-                    <p className="mb-2">The Dream Dwell platform is provided "as is" without any warranties, express or implied. We do not guarantee the accuracy, completeness, or reliability of any content on the platform.</p>
+                {/* Agreement Section */}
+                <section className="py-16 px-4 lg:px-0 bg-gray-50">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <label className="flex items-center justify-center">
+                            <input type="checkbox" className="form-checkbox h-5 w-5 text-primary" />
+                            <span className="ml-2 text-lg">I have read and agree to the Terms and Conditions.</span>
+                        </label>
+                    </div>
                 </section>
             </div>
         </StorefrontLayout>
