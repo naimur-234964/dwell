@@ -4,9 +4,10 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Welcome() {
-    const { auth, locations, topProperties, discountedProperties } = usePage<SharedData>().props;
+    const { auth, locations, topProperties, discountedProperties, latestProperties } = usePage<SharedData>().props;
 
     const getWeekendDates = () => {
         const today = new Date();
@@ -34,11 +35,18 @@ export default function Welcome() {
 
 
     useEffect(() => {
+        gsap.registerPlugin(ScrollTrigger);
+
         gsap.from(".gsap-animated-heading", {
             opacity: 0,
             y: 50,
             duration: 1,
             ease: "power3.out",
+            scrollTrigger: {
+                trigger: ".gsap-animated-heading",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
         });
 
         gsap.from(".gsap-animated-quick-escape-heading", {
@@ -47,6 +55,11 @@ export default function Welcome() {
             duration: 1,
             ease: "power3.out",
             delay: 0.5, // Add a slight delay to animate after the first one
+            scrollTrigger: {
+                trigger: ".gsap-animated-quick-escape-heading",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
         });
 
         gsap.from(".gsap-animated-location-card", {
@@ -56,6 +69,11 @@ export default function Welcome() {
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
             delay: 1, // Delay after the previous animations
+            scrollTrigger: {
+                trigger: ".gsap-animated-location-card",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
         });
 
         gsap.from(".gsap-animated-property-card", {
@@ -65,6 +83,11 @@ export default function Welcome() {
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
             delay: 1.5, // Delay after the previous animations
+            scrollTrigger: {
+                trigger: ".gsap-animated-property-card",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
         });
 
         gsap.from(".gsap-animated-discount-card", {
@@ -74,6 +97,25 @@ export default function Welcome() {
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
             delay: 2, // Delay after the previous animations
+            scrollTrigger: {
+                trigger: ".gsap-animated-discount-card",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
+        });
+
+        gsap.from(".gsap-animated-latest-card", {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.1, // Stagger the animation for each card
+            delay: 2.5, // Delay after the previous animations
+            scrollTrigger: {
+                trigger: ".gsap-animated-latest-card",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
         });
     }, []);
 
@@ -254,6 +296,41 @@ export default function Welcome() {
                                         <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
                                         <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
                                     </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {latestProperties.length > 0 && (
+                <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
+                    <h2 className="text-3xl font-bold mb-2">Latest Properties</h2>
+                    <p className="text-lg text-gray-600 mb-6">Discover our newest listings</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {latestProperties.map((property) => (
+                            <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden gsap-animated-latest-card">
+                                {property.image_path && (
+                                    <img
+                                        src={property.image_path}
+                                        alt={property.title}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                )}
+                                <div className="p-4">
+                                    <h3 className="text-xl font-bold mb-1">{property.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
+                                    <p className="text-lg font-semibold">
+                                        {property.discount_price ? (
+                                            <>
+                                                <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
+                                                <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
+                                            </>
+                                        ) : (
+                                            `${property.price_per_night}`
+                                        )}
+                                    </p>
                                 </div>
                             </div>
                         ))}

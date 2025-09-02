@@ -30,6 +30,7 @@ export interface SharedData {
     locations: Location[];
     topProperties: Property[];
     discountedProperties: Property[];
+    latestProperties: Property[];
     [key: string]: unknown;
 }
 

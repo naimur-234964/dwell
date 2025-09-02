@@ -33,10 +33,20 @@ Route::get('/', function () {
             return $property;
         });
 
+    $latestProperties = Property::with(['address', 'propertyImages'])
+        ->latest()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
     return Inertia::render('welcome', [
         'locations' => $locations,
         'topProperties' => $topProperties,
         'discountedProperties' => $discountedProperties,
+        'latestProperties' => $latestProperties,
     ]);
 })->name('home');
 
