@@ -156,6 +156,7 @@ use App\Http\Controllers\DashboardController; // Added
 use App\Http\Controllers\CouponValidationController; // Added
 
 Route::get('/properties', [App\Http\Controllers\PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/{property}', [App\Http\Controllers\PropertyController::class, 'show'])->name('properties.show');
 
 // Admin Dashboard API Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
