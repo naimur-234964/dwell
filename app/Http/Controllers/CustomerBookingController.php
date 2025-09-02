@@ -8,6 +8,7 @@ use App\Models\Coupon;
 use App\Models\Property;
 use Carbon\Carbon;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerBookingController extends Controller
 {
@@ -25,12 +26,11 @@ class CustomerBookingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Property $property)
     {
-        // Customers typically don't create bookings directly via a form like this
-        // Bookings are usually made through the property listing page.
-        // This method might be removed or adapted based on actual UX.
-        return Inertia::render('Customer/Bookings/Create');
+        $property->load('address', 'propertyImages');
+        $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+        return Inertia::render('Customer/Bookings/Create', ['property' => $property]);
     }
 
     /**

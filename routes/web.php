@@ -5,6 +5,8 @@ use Inertia\Inertia;
 use App\Models\Location;
 use App\Models\Property;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CouponValidationController;
 
 Route::get('/', function () {
     $locations = Location::all()->map(function ($location) {
@@ -152,8 +154,7 @@ require __DIR__.'/admin.php';
 require __DIR__.'/host.php';
 require __DIR__.'/customer.php';
 
-use App\Http\Controllers\DashboardController; // Added
-use App\Http\Controllers\CouponValidationController; // Added
+Route::get('/properties/{property}/booking', [App\Http\Controllers\CustomerBookingController::class, 'create'])->name('properties.booking.create')->middleware(['auth', 'verified']);
 
 Route::get('/properties', [App\Http\Controllers\PropertyController::class, 'index'])->name('properties.index');
 Route::get('/properties/{property}', [App\Http\Controllers\PropertyController::class, 'show'])->name('properties.show');
@@ -177,6 +178,4 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host/dashboard')->
 });
 
 // Coupon Validation API Route
-Route::get('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');
-
-
+Route::post('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');

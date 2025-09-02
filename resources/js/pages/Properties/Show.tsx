@@ -93,7 +93,9 @@ export default function Show() {
                             </div>
                             <p className="text-2xl font-bold text-primary mb-4">${property.price_per_night}/night</p>
                             <p className="text-gray-700 mb-6">{property.description}</p>
-                            <button className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-colors">Book Now</button>
+                                                        <Link href={route('properties.booking.create', { property: property.id })}>
+                                <button className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-colors">Book Now</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

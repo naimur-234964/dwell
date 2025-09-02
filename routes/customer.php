@@ -5,6 +5,6 @@ use Inertia\Inertia;
 
 
 
-Route::middleware(['auth', 'verified', 'role:customer'])->group(function () {
-    //
+Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->group(function () {
+    Route::post('/bookings', [App\Http\Controllers\CustomerBookingController::class, 'store'])->name('bookings.store');
 });
