@@ -6,7 +6,31 @@ import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
 export default function Welcome() {
-    const { auth, locations, topProperties } = usePage<SharedData>().props;
+    const { auth, locations, topProperties, discountedProperties } = usePage<SharedData>().props;
+
+    const getWeekendDates = () => {
+        const today = new Date();
+        let startDate = new Date(today);
+        let endDate = new Date(today);
+
+        // Find the next Friday (day 5) or current Friday if today is Friday or later
+        const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        if (dayOfWeek <= 5) { // If today is Sunday to Friday
+            startDate.setDate(today.getDate() + (5 - dayOfWeek));
+        } else { // If today is Saturday
+            startDate.setDate(today.getDate() + (5 + 7 - dayOfWeek)); // Next Friday
+        }
+
+        endDate.setDate(startDate.getDate() + 2); // Sunday
+
+        const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
+        const startMonthDay = startDate.toLocaleDateString('en-US', options);
+        const endMonthDay = endDate.toLocaleDateString('en-US', options);
+
+        return `${startMonthDay} - ${endMonthDay}`;
+    };
+
+    const weekendDates = getWeekendDates();
 
 
     useEffect(() => {
@@ -41,6 +65,15 @@ export default function Welcome() {
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
             delay: 1.5, // Delay after the previous animations
+        });
+
+        gsap.from(".gsap-animated-discount-card", {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.1, // Stagger the animation for each card
+            delay: 2, // Delay after the previous animations
         });
     }, []);
 
@@ -198,6 +231,34 @@ export default function Welcome() {
                     </div>
                 </section>
 
+            )}
+
+            {discountedProperties.length > 0 && (
+                <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
+                    <h2 className="text-3xl font-bold mb-2">Deals for the weekend</h2>
+                    <p className="text-lg text-gray-600 mb-6">Save on stays for {weekendDates}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        {discountedProperties.map((property) => (
+                            <div key={property.id} className="bg-white rounded-lg shadow-md overflow-hidden gsap-animated-discount-card">
+                                {property.image_path && (
+                                    <img
+                                        src={property.image_path}
+                                        alt={property.title}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                )}
+                                <div className="p-4">
+                                    <h3 className="text-xl font-bold mb-1">{property.title}</h3>
+                                    <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
+                                    <div className="flex items-center mb-2">
+                                        <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
+                                        <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             )}
 
 

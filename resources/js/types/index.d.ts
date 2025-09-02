@@ -29,6 +29,7 @@ export interface SharedData {
     sidebarOpen: boolean;
     locations: Location[];
     topProperties: Property[];
+    discountedProperties: Property[];
     [key: string]: unknown;
 }
 
@@ -65,6 +66,7 @@ export interface Property {
     title: string;
     description: string;
     price_per_night: number;
+    discount_price?: number; // Added for discounted properties
     number_of_guests: number;
     number_of_bedrooms: number;
     number_of_beds: number;

@@ -23,9 +23,20 @@ Route::get('/', function () {
             return $property;
         });
 
+    $discountedProperties = Property::with(['address', 'propertyImages'])
+        ->whereNotNull('discount_price')
+        ->inRandomOrder()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
     return Inertia::render('welcome', [
         'locations' => $locations,
         'topProperties' => $topProperties,
+        'discountedProperties' => $discountedProperties,
     ]);
 })->name('home');
 
