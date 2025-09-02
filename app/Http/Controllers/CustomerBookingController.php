@@ -81,7 +81,7 @@ class CustomerBookingController extends Controller
             $couponId = $coupon->id;
         }
 
-        Booking::create(array_merge($validatedData, [
+        $booking = Booking::create(array_merge($validatedData, [
             'customer_id' => $customerId,
             'total_price' => round($finalPrice, 2),
             'phone_no' => $validatedData['phone_no'],
@@ -90,7 +90,7 @@ class CustomerBookingController extends Controller
             'coupon_id' => $couponId,
         ]));
 
-        return redirect()->route('customer.bookings.index')->with('success', 'Booking created successfully.');
+        return redirect()->route('customer.bookings.payment', $booking->id);
     }
 
     /**
@@ -152,5 +152,36 @@ class CustomerBookingController extends Controller
 
         $booking->delete();
         return redirect()->route('customer.bookings.index')->with('success', 'Booking deleted successfully.');
+    }
+
+    public function showPaymentForm(Booking $booking)
+    {
+        $customerId = auth()->id();
+        if ($booking->customer_id !== $customerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+                $booking->load('property'); // Eager-load the property relationship
+
+        return Inertia::render('Customer/Bookings/Payment', [
+            'booking' => $booking->toArray(), // Convert to array to ensure relationships are included
+        ]);
+    }
+
+    public function processPayment(Request $request, Booking $booking)
+    {
+        $customerId = auth()->id();
+        if ($booking->customer_id !== $customerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // In a real application, you would integrate with a payment gateway here.
+        // For this simulation, we just update the status.
+        $booking->update([
+            'advance_payment_status' => 'paid',
+            'status' => 'confirmed', // Optionally confirm the booking after payment
+        ]);
+
+        return redirect()->route('customer.bookings.index')->with('success', 'Advance payment successful and booking confirmed!');
     }
 }
