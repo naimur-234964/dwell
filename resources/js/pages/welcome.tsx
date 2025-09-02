@@ -4,7 +4,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Welcome() {
     const { auth, locations, topProperties, discountedProperties, latestProperties } = usePage<SharedData>().props;
@@ -35,18 +34,11 @@ export default function Welcome() {
 
 
     useEffect(() => {
-        gsap.registerPlugin(ScrollTrigger);
-
         gsap.from(".gsap-animated-heading", {
             opacity: 0,
             y: 50,
             duration: 1,
             ease: "power3.out",
-            scrollTrigger: {
-                trigger: ".gsap-animated-heading",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
         });
 
         gsap.from(".gsap-animated-quick-escape-heading", {
@@ -54,12 +46,7 @@ export default function Welcome() {
             x: 50,
             duration: 1,
             ease: "power3.out",
-            delay: 0.5, // Add a slight delay to animate after the first one
-            scrollTrigger: {
-                trigger: ".gsap-animated-quick-escape-heading",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 0.5,
         });
 
         gsap.from(".gsap-animated-location-card", {
@@ -68,12 +55,7 @@ export default function Welcome() {
             duration: 0.8,
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
-            delay: 1, // Delay after the previous animations
-            scrollTrigger: {
-                trigger: ".gsap-animated-location-card",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 1,
         });
 
         gsap.from(".gsap-animated-property-card", {
@@ -82,12 +64,7 @@ export default function Welcome() {
             duration: 0.8,
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
-            delay: 1.5, // Delay after the previous animations
-            scrollTrigger: {
-                trigger: ".gsap-animated-property-card",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 1.5,
         });
 
         gsap.from(".gsap-animated-discount-card", {
@@ -96,12 +73,7 @@ export default function Welcome() {
             duration: 0.8,
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
-            delay: 2, // Delay after the previous animations
-            scrollTrigger: {
-                trigger: ".gsap-animated-discount-card",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 2,
         });
 
         gsap.from(".gsap-animated-latest-card", {
@@ -110,12 +82,7 @@ export default function Welcome() {
             duration: 0.8,
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
-            delay: 2.5, // Delay after the previous animations
-            scrollTrigger: {
-                trigger: ".gsap-animated-latest-card",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 2.5,
         });
 
         gsap.from(".gsap-animated-why-card", {
@@ -124,12 +91,7 @@ export default function Welcome() {
             duration: 0.8,
             ease: "power3.out",
             stagger: 0.1, // Stagger the animation for each card
-            delay: 3, // Delay after the previous animations
-            scrollTrigger: {
-                trigger: ".gsap-animated-why-card",
-                start: "top center",
-                toggleActions: "play none none none",
-            },
+            delay: 3,
         });
     }, []);
 
