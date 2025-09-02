@@ -91,8 +91,14 @@ Route::get('/airport-taxis', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard', [
-            'userRole' => auth()->user()->role,
+        $userRole = auth()->user()->role;
+
+        if ($userRole === 'customer') {
+            return Inertia::render('Customer/Dashboard');
+        }
+
+        return Inertia::render('AdminHost/Dashboard', [
+            'userRole' => $userRole,
         ]);
     })->name('dashboard');
 });
