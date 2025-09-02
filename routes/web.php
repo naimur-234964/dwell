@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Location;
+use App\Models\Property;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
@@ -10,8 +11,21 @@ Route::get('/', function () {
         $location->image_path = Storage::url($location->image_path);
         return $location;
     });
+
+    $topProperties = Property::with(['address', 'propertyImages', 'reviews'])
+        ->withAvg('reviews', 'rating')
+        ->having('reviews_avg_rating', '>=', 4)
+        ->inRandomOrder()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
     return Inertia::render('welcome', [
         'locations' => $locations,
+        'topProperties' => $topProperties,
     ]);
 })->name('home');
 
@@ -119,10 +133,8 @@ require __DIR__.'/customer.php';
 
 use App\Http\Controllers\DashboardController; // Added
 use App\Http\Controllers\CouponValidationController; // Added
-use App\Models\Property; // Added
-use App\Http\Controllers\PropertyController; // Added
 
-Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties', [App\Http\Controllers\PropertyController::class, 'index'])->name('properties.index');
 
 // Admin Dashboard API Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
@@ -145,9 +157,4 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host/dashboard')->
 // Coupon Validation API Route
 Route::get('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');
 
-// Property Booking Demo Route (for testing coupon application)
-Route::get('/book-property-demo/{property}', function (Property $property) {
-    return Inertia::render('Customer/PropertyBookingDemo', [
-        'property' => $property,
-    ]);
-})->name('book-property-demo');
+
