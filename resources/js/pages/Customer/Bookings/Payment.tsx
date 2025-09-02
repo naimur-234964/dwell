@@ -6,10 +6,11 @@ import { Visa, Mastercard, Amex, Paypal } from 'react-payment-logos/dist/flat';
 
 interface PaymentPageProps extends SharedData {
     booking: Booking;
+    payment: Payment;
 }
 
 export default function Payment() {
-    const { booking } = usePage<PaymentPageProps>().props;
+    const { booking, payment } = usePage<PaymentPageProps>().props;
 
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string | null>(null);
 
@@ -27,7 +28,7 @@ export default function Payment() {
                     <h1 className="text-3xl font-bold mb-6">Complete Your Booking</h1>
                     <p className="text-lg text-gray-700 mb-4">Your booking for property <strong>{booking.property?.title || 'N/A'}</strong> is almost complete!</p>
                     <p className="text-xl font-semibold text-primary mb-8">
-                        Advance Payment Due: ${parseFloat(booking.advance_payment_amount).toFixed(2)}
+                        Advance Payment : ${parseFloat(payment.advance_amount).toFixed(2)}
                     </p>
                     <p className="text-md text-gray-600 mb-8">
                         In a real application, you would be redirected to a secure payment gateway here.
