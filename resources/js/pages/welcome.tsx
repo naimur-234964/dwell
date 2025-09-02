@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, locations } = usePage<SharedData>().props;
+
 
     useEffect(() => {
         gsap.from(".gsap-animated-heading", {
@@ -23,6 +24,15 @@ export default function Welcome() {
             ease: "power3.out",
             delay: 0.5, // Add a slight delay to animate after the first one
         });
+
+        gsap.from(".gsap-animated-location-card", {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.1, // Stagger the animation for each card
+            delay: 1, // Delay after the previous animations
+        });
     }, []);
 
     return (
@@ -32,8 +42,8 @@ export default function Welcome() {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head>
             {/* Welcome page specific content can go here if needed, otherwise leave empty */}
-            <div className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
-                <section className="mb-12">
+            <section className="mb-12">
+                <div className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
                     <h2 className="text-2xl font-bold">Offers</h2>
                     <p className="text-lg text-gray-600 mb-4">Promotions, deals, and special offers for you</p>
 
@@ -65,8 +75,31 @@ export default function Welcome() {
                             </div>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            {locations.length > 0 && (
+                <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
+                    <h2 className="text-2xl font-bold">Trending destinations</h2>
+                    <p className="text-lg text-gray-600 mb-4">Most popular choices for travelers from Bangladesh</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+                        {locations.map((location, index) => (
+                            <Link
+                                key={location.id}
+                                href={`/properties?location=${location.name}`}
+                                className="relative bg-cover bg-center rounded-lg overflow-hidden p-6 text-white h-64 flex items-end gsap-animated-location-card cursor-pointer"
+                                style={{ backgroundImage: `url('${location.image_path}')` }}
+                            >
+                                <div className="absolute inset-0 bg-black opacity-20"></div> {/* Overlay */}
+                                <div className="relative z-10 flex items-center">
+                                    <h3 className="text-xl font-bold mr-2">{location.name}</h3>
+                                </div>
+                            </Link>
+                        ))}
+                    </div>
                 </section>
-            </div>
+            )}
 
 
         </StorefrontLayout>

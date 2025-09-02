@@ -2,9 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Location;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    $locations = Location::all()->map(function ($location) {
+        $location->image_path = Storage::url($location->image_path);
+        return $location;
+    });
+    return Inertia::render('welcome', [
+        'locations' => $locations,
+    ]);
 })->name('home');
 
 // Footer Pages
@@ -112,6 +120,9 @@ require __DIR__.'/customer.php';
 use App\Http\Controllers\DashboardController; // Added
 use App\Http\Controllers\CouponValidationController; // Added
 use App\Models\Property; // Added
+use App\Http\Controllers\PropertyController; // Added
+
+Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
 
 // Admin Dashboard API Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {

@@ -25,4 +25,9 @@ class Address extends Model
     {
         return $this->belongsTo(Property::class);
     }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }
