@@ -43,6 +43,7 @@ class CustomerBookingController extends Controller
             'property_id' => 'required|exists:properties,id',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
+            'phone_no' => 'required|string|max:20',
             'total_price' => 'required|numeric|min:0',
             'status' => 'required|string|max:255',
             'coupon_id' => 'nullable|exists:coupons,id',
@@ -50,6 +51,7 @@ class CustomerBookingController extends Controller
 
         $finalPrice = $validatedData['total_price'];
         $couponId = null;
+        $advancePaymentAmount = round($finalPrice * 0.10, 2);
 
         if (isset($validatedData['coupon_id'])) {
             $coupon = Coupon::find($validatedData['coupon_id']);
@@ -82,6 +84,9 @@ class CustomerBookingController extends Controller
         Booking::create(array_merge($validatedData, [
             'customer_id' => $customerId,
             'total_price' => round($finalPrice, 2),
+            'phone_no' => $validatedData['phone_no'],
+            'advance_payment_amount' => $advancePaymentAmount,
+            'advance_payment_status' => 'pending',
             'coupon_id' => $couponId,
         ]));
 

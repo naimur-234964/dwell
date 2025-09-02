@@ -16,13 +16,18 @@ export default function Create() {
     const [discountAmount, setDiscountAmount] = useState(0);
     const [couponError, setCouponError] = useState('');
     const [couponSuccess, setCouponSuccess] = useState('');
+    const [phoneNo, setPhoneNo] = useState('');
+    const [advancePayment, setAdvancePayment] = useState(0);
 
     const { data, setData, post, processing, errors } = useForm({
         property_id: property.id,
         check_in_date: '',
         check_out_date: '',
         number_of_guests: 1,
+        phone_no: '',
         total_price: 0,
+        advance_payment_amount: 0,
+        advance_payment_status: 'pending',
         status: 'pending',
         coupon_id: null as number | null,
     });
@@ -36,19 +41,30 @@ export default function Create() {
                 setNumberOfNights(nights);
                 const price = (property.discount_price || property.price_per_night) * nights;
                 const finalPrice = price - discountAmount;
+                const calculatedAdvancePayment = finalPrice * 0.10;
                 setTotalPrice(finalPrice);
+                setAdvancePayment(calculatedAdvancePayment);
                 setData('total_price', finalPrice);
+                setData('advance_payment_amount', calculatedAdvancePayment);
             } else {
                 setNumberOfNights(0);
                 setTotalPrice(0);
+                setAdvancePayment(0);
                 setData('total_price', 0);
+                setData('advance_payment_amount', 0);
             }
         } else {
             setNumberOfNights(0);
             setTotalPrice(0);
+            setAdvancePayment(0);
             setData('total_price', 0);
+            setData('advance_payment_amount', 0);
         }
     }, [data.check_in_date, data.check_out_date, property.price_per_night, property.discount_price, discountAmount]);
+
+    useEffect(() => {
+        setData('phone_no', phoneNo);
+    }, [phoneNo]);
 
     const applyCoupon = async () => {
         if (!data.check_in_date || !data.check_out_date) {
@@ -127,6 +143,7 @@ export default function Create() {
                                             onChange={(e) => setData('check_in_date', e.target.value)}
                                             required
                                         />
+                                        {errors.check_in_date && <p className="text-red-500 text-sm mt-2">{errors.check_in_date}</p>}
                                     </div>
                                     <div>
                                         <label htmlFor="check_out_date" className="block text-sm font-medium text-gray-700 mb-1">Check-out Date</label>
@@ -138,6 +155,7 @@ export default function Create() {
                                             onChange={(e) => setData('check_out_date', e.target.value)}
                                             required
                                         />
+                                        {errors.check_out_date && <p className="text-red-500 text-sm mt-2">{errors.check_out_date}</p>}
                                     </div>
                                 </div>
                                 <div>
@@ -152,6 +170,19 @@ export default function Create() {
                                         max={property.number_of_guests}
                                         required
                                     />
+                                    {errors.number_of_guests && <p className="text-red-500 text-sm mt-2">{errors.number_of_guests}</p>}
+                                </div>
+                                <div>
+                                    <label htmlFor="phone_no" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                    <input
+                                        type="text"
+                                        id="phone_no"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-shadow"
+                                        value={phoneNo}
+                                        onChange={(e) => setPhoneNo(e.target.value)}
+                                        required
+                                    />
+                                    {errors.phone_no && <p className="text-red-500 text-sm mt-2">{errors.phone_no}</p>}
                                 </div>
                                 <div className="flex gap-4">
                                     <div className="flex-grow">
@@ -191,6 +222,12 @@ export default function Create() {
                                         <p>Total (USD)</p>
                                         <p>${totalPrice.toFixed(2)}</p>
                                     </div>
+                                    {advancePayment > 0 && (
+                                        <div className="flex justify-between items-center font-bold text-lg pt-2">
+                                            <p className="text-green-600">Advance Payment (10%)</p>
+                                            <p className="text-green-600">${advancePayment.toFixed(2)}</p>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="pt-6">
                                     <button
