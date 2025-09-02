@@ -16,6 +16,9 @@ class Booking extends Model
         'check_out_date',
         'total_price',
         'status',
+        'phone_no',
+        'advance_payment_amount',
+        'advance_payment_status',
         'coupon_id',
     ];
 
@@ -32,5 +35,10 @@ class Booking extends Model
     public function coupon()
     {
         return $this->belongsTo(Coupon::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

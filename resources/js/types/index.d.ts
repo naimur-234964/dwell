@@ -27,6 +27,10 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     sidebarOpen: boolean;
+    locations: Location[];
+    topProperties: Property[];
+    discountedProperties: Property[];
+    latestProperties: Property[];
     [key: string]: unknown;
 }
 
@@ -63,6 +67,7 @@ export interface Property {
     title: string;
     description: string;
     price_per_night: number;
+    discount_price?: number; // Added for discounted properties
     number_of_guests: number;
     number_of_bedrooms: number;
     number_of_beds: number;
@@ -71,6 +76,18 @@ export interface Property {
     address: Address;
     amenities: Amenity[];
     bookings_count?: number;
+    propertyImages?: PropertyImage[];
+    reviews_avg_rating?: number;
+    image_path?: string; // For the first image URL
+}
+
+export interface PropertyImage {
+    id: number;
+    property_id: number;
+    image_path: string;
+    order: number;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Location {

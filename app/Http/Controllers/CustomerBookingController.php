@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Coupon;
 use App\Models\Property;
+use App\Models\Payment; // Import Payment model
 use Carbon\Carbon;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 class CustomerBookingController extends Controller
 {
@@ -25,12 +27,11 @@ class CustomerBookingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Property $property)
     {
-        // Customers typically don't create bookings directly via a form like this
-        // Bookings are usually made through the property listing page.
-        // This method might be removed or adapted based on actual UX.
-        return Inertia::render('Customer/Bookings/Create');
+        $property->load('address', 'propertyImages');
+        $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+        return Inertia::render('Customer/Bookings/Create', ['property' => $property]);
     }
 
     /**
@@ -43,6 +44,7 @@ class CustomerBookingController extends Controller
             'property_id' => 'required|exists:properties,id',
             'check_in_date' => 'required|date',
             'check_out_date' => 'required|date|after:check_in_date',
+            'phone_no' => 'required|string|max:20',
             'total_price' => 'required|numeric|min:0',
             'status' => 'required|string|max:255',
             'coupon_id' => 'nullable|exists:coupons,id',
@@ -50,6 +52,7 @@ class CustomerBookingController extends Controller
 
         $finalPrice = $validatedData['total_price'];
         $couponId = null;
+        $advancePaymentAmount = round($finalPrice * 0.10, 2);
 
         if (isset($validatedData['coupon_id'])) {
             $coupon = Coupon::find($validatedData['coupon_id']);
@@ -79,13 +82,27 @@ class CustomerBookingController extends Controller
             $couponId = $coupon->id;
         }
 
-        Booking::create(array_merge($validatedData, [
+        $booking = Booking::create(array_merge($validatedData, [
             'customer_id' => $customerId,
             'total_price' => round($finalPrice, 2),
+            'phone_no' => $validatedData['phone_no'],
             'coupon_id' => $couponId,
         ]));
 
-        return redirect()->route('customer.bookings.index')->with('success', 'Booking created successfully.');
+        // Create a payment record for the advance payment
+        Payment::create([
+            'booking_id' => $booking->id,
+            'customer_id' => $customerId,
+            'amount' => $advancePaymentAmount,
+            'advance_amount' => $advancePaymentAmount,
+            'due_amount' => $finalPrice - $advancePaymentAmount,
+            'currency' => 'USD',
+            'payment_method' => 'pending', // Will be updated after actual payment
+            'transaction_id' => 'pending_' . uniqid(), // Placeholder transaction ID
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('customer.bookings.payment', $booking->id);
     }
 
     /**
@@ -147,5 +164,69 @@ class CustomerBookingController extends Controller
 
         $booking->delete();
         return redirect()->route('customer.bookings.index')->with('success', 'Booking deleted successfully.');
+    }
+
+    public function showPaymentForm(Booking $booking)
+    {
+        $customerId = auth()->id();
+        if ($booking->customer_id !== $customerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $booking->load('property'); // Eager-load the property relationship
+        $payment = $booking->payments()->where('status', 'pending')->first(); // Get the pending payment for this booking
+
+        if (!$payment) {
+            // Handle case where no pending payment is found (e.g., already paid, or error)
+            return redirect()->route('customer.bookings.index')->with('error', 'No pending payment found for this booking.');
+        }
+
+        return Inertia::render('Customer/Bookings/Payment', [
+            'booking' => $booking->toArray(),
+            'payment' => $payment->toArray(), // Pass the payment object to the frontend
+        ]);
+    }
+
+    public function processPayment(Request $request, Booking $booking)
+    {
+        $customerId = auth()->id();
+        if ($booking->customer_id !== $customerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $payment = $booking->payments()->where('status', 'pending')->first();
+
+        if (!$payment) {
+            return redirect()->back()->with('error', 'No pending payment found for this booking.');
+        }
+
+        // In a real application, you would integrate with a payment gateway here.
+        // For this simulation, we just update the status.
+        $payment->update([
+            'status' => 'paid',
+            'payment_method' => 'simulated_card', // Example payment method
+            'transaction_id' => 'simulated_' . uniqid(), // Generate a unique transaction ID
+        ]);
+
+        // Optionally, update the booking status to confirmed after payment
+        $booking->update([
+            'status' => 'confirmed',
+        ]);
+
+        return redirect()->route('customer.bookings.congratulations', $booking->id);
+    }
+
+    public function congratulations(Booking $booking)
+    {
+        $customerId = auth()->id();
+        if ($booking->customer_id !== $customerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $booking->load('property.address', 'customer');
+
+        return Inertia::render('Customer/Bookings/Congratulations', [
+            'booking' => $booking->toArray(),
+        ]);
     }
 }

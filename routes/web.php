@@ -2,9 +2,54 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Location;
+use App\Models\Property;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CouponValidationController;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    $locations = Location::all()->map(function ($location) {
+        $location->image_path = Storage::url($location->image_path);
+        return $location;
+    });
+
+    $topProperties = Property::with(['address', 'propertyImages', 'reviews'])
+        ->withAvg('reviews', 'rating')
+        ->having('reviews_avg_rating', '>=', 4)
+        ->inRandomOrder()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
+    $discountedProperties = Property::with(['address', 'propertyImages'])
+        ->whereNotNull('discount_price')
+        ->inRandomOrder()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
+    $latestProperties = Property::with(['address', 'propertyImages'])
+        ->latest()
+        ->limit(4)
+        ->get()
+        ->map(function ($property) {
+            $property->image_path = $property->propertyImages->first() ? Storage::url($property->propertyImages->first()->image_path) : null;
+            return $property;
+        });
+
+    return Inertia::render('welcome', [
+        'locations' => $locations,
+        'topProperties' => $topProperties,
+        'discountedProperties' => $discountedProperties,
+        'latestProperties' => $latestProperties,
+    ]);
 })->name('home');
 
 // Footer Pages
@@ -109,9 +154,10 @@ require __DIR__.'/admin.php';
 require __DIR__.'/host.php';
 require __DIR__.'/customer.php';
 
-use App\Http\Controllers\DashboardController; // Added
-use App\Http\Controllers\CouponValidationController; // Added
-use App\Models\Property; // Added
+Route::get('/properties/{property}/booking', [App\Http\Controllers\CustomerBookingController::class, 'create'])->name('properties.booking.create')->middleware(['auth', 'verified']);
+
+Route::get('/properties', [App\Http\Controllers\PropertyController::class, 'index'])->name('properties.index');
+Route::get('/properties/{property}', [App\Http\Controllers\PropertyController::class, 'show'])->name('properties.show');
 
 // Admin Dashboard API Routes
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin/dashboard')->name('admin.dashboard.')->group(function () {
@@ -132,11 +178,4 @@ Route::middleware(['auth', 'verified', 'role:host'])->prefix('host/dashboard')->
 });
 
 // Coupon Validation API Route
-Route::get('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');
-
-// Property Booking Demo Route (for testing coupon application)
-Route::get('/book-property-demo/{property}', function (Property $property) {
-    return Inertia::render('Customer/PropertyBookingDemo', [
-        'property' => $property,
-    ]);
-})->name('book-property-demo');
+Route::post('/api/validate-coupon', CouponValidationController::class)->name('api.validate-coupon');
