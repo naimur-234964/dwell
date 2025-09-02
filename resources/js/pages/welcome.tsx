@@ -117,6 +117,20 @@ export default function Welcome() {
                 toggleActions: "play none none none",
             },
         });
+
+        gsap.from(".gsap-animated-why-card", {
+            opacity: 0,
+            y: 50,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.1, // Stagger the animation for each card
+            delay: 3, // Delay after the previous animations
+            scrollTrigger: {
+                trigger: ".gsap-animated-why-card",
+                start: "top center",
+                toggleActions: "play none none none",
+            },
+        });
     }, []);
 
     return (
@@ -187,7 +201,7 @@ export default function Welcome() {
 
             {topProperties.length > 0 && (
                 <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
-                    <h2 className="text-3xl font-bold mb-2">Stay at our top unique properties</h2>
+                    <h2 className="text-2xl font-bold mb-2">Stay at our top unique properties</h2>
                     <p className="text-lg text-gray-600 mb-6">From castles and villas to boats and igloos, we have it all</p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -277,7 +291,7 @@ export default function Welcome() {
 
             {discountedProperties.length > 0 && (
                 <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
-                    <h2 className="text-3xl font-bold mb-2">Deals for the weekend</h2>
+                    <h2 className="text-2xl font-bold mb-2">Deals for the weekend</h2>
                     <p className="text-lg text-gray-600 mb-6">Save on stays for {weekendDates}</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {discountedProperties.map((property) => (
@@ -305,7 +319,7 @@ export default function Welcome() {
 
             {latestProperties.length > 0 && (
                 <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
-                    <h2 className="text-3xl font-bold mb-2">Latest Properties</h2>
+                    <h2 className="text-2xl font-bold mb-2">Latest Properties</h2>
                     <p className="text-lg text-gray-600 mb-6">Discover our newest listings</p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -337,6 +351,47 @@ export default function Welcome() {
                     </div>
                 </section>
             )}
+
+            <section className="max-w-7xl mx-auto px-6 py-10 lg:px-8">
+                <h2 className="text-2xl font-bold mb-6 text-center">Why Dream Dwell?</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-white rounded-lg shadow-md p-6 text-center gsap-animated-why-card">
+                        {/* Placeholder Icon 1 */}
+                        <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 16l4 4m0 0l-4-4m4 4L17 16"></path></svg>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">Book now, pay at the property</h3>
+                        <p className="text-gray-600 text-sm">FREE cancellation on most rooms</p>
+                    </div>
+
+                    <div className="bg-white rounded-lg shadow-md p-6 text-center gsap-animated-why-card">
+                        {/* Placeholder Icon 2 */}
+                        <div className="w-16 h-16 mx-auto mb-4 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21H12a2 2 0 01-2-2v-7a2 2 0 012-2h2zM7 9h1.5a2 2 0 001.555-3.243l-1.555-2.757a1 1 0 00-1.732 0l-1.555 2.757A2 2 0 007 9z"></path></svg>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">300M+ reviews from fellow travelers</h3>
+                        <p className="text-gray-600 text-sm">Get trusted information from guests like you</p>
+                    </div>
+
+                    <div className="bg-white rounded-lg shadow-md p-6 text-center gsap-animated-why-card">
+                        {/* Placeholder Icon 3 */}
+                        <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.5 10a18.022 18.022 0 01-3.5-5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.5 10a18.022 18.022 0 01-3.5-5h12m7 0l-4 4m0 0l4 4m0-4h-4"></path></svg>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">2+ million properties worldwide</h3>
+                        <p className="text-gray-600 text-sm">Hotels, guest houses, apartments, and more...</p>
+                    </div>
+
+                    <div className="bg-white rounded-lg shadow-md p-6 text-center gsap-animated-why-card">
+                        {/* Placeholder Icon 4 */}
+                        <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">Trusted 24/7 customer service you can rely on</h3>
+                        <p className="text-gray-600 text-sm">We're always here to help</p>
+                    </div>
+                </div>
+            </section>
 
 
         </StorefrontLayout>
