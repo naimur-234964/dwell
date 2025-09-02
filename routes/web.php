@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Location;
 use App\Models\Property;
+use App\Models\Booking; // Import Booking model
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CouponValidationController;
@@ -139,7 +140,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $userRole = auth()->user()->role;
 
         if ($userRole === 'customer') {
-            return Inertia::render('Customer/Dashboard');
+            $bookings = auth()->user()->bookings()->with(['property', 'payments'])->get();
+            return Inertia::render('Customer/Dashboard', [
+                'bookings' => $bookings->toArray(),
+            ]);
         }
 
         return Inertia::render('AdminHost/Dashboard', [

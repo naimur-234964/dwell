@@ -114,7 +114,10 @@ class CustomerBookingController extends Controller
         if ($booking->customer_id !== $customerId) {
             abort(403, 'Unauthorized action.');
         }
-        return Inertia::render('Customer/Bookings/Show', ['booking' => $booking]);
+
+        $booking->load('property.address', 'payments', 'customer');
+
+        return Inertia::render('Customer/Bookings/Show', ['booking' => $booking->toArray()]);
     }
 
     /**
