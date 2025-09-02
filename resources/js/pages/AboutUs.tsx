@@ -60,7 +60,7 @@ const AboutUs: React.FC = () => {
                         <h2 className="text-4xl font-bold mb-12 text-center text-primary">Our Values</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8 text-center">
                             {['Quality', 'Trust', 'Community', 'Innovation', 'Service'].map((value) => (
-                                <div key={value} className="p-6 border border-gray-200 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                <div key={value} className="p-8 border border-primary rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                                     <h3 className="text-2xl font-semibold mb-3">{value}</h3>
                                     <p className="text-gray-600">We meticulously curate our listings to ensure every property meets our high standards.</p>
                                 </div>

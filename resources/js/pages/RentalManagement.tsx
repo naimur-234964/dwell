@@ -63,18 +63,18 @@ const RentalManagement: React.FC = () => {
                     <div className="max-w-7xl mx-auto text-center">
                         <h2 className="text-4xl font-bold mb-12 text-primary">Get Started in 3 Simple Steps</h2>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                            <div className="flex flex-col items-center">
-                                <div className="bg-primary text-white rounded-full p-6 mb-4 text-4xl">1</div>
+                            <div className="flex flex-col items-center border border-primary rounded-lg p-10 hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary text-white rounded-full px-6 py-3 mb-4 text-4xl">1</div>
                                 <h3 className="text-2xl font-semibold mb-2">List Your Property</h3>
                                 <p className="text-gray-600">Create a stunning listing with our easy-to-use tools.</p>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <div className="bg-primary text-white rounded-full p-6 mb-4 text-4xl">2</div>
+                            <div className="flex flex-col items-center border border-primary rounded-lg p-10 hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary text-white rounded-full px-6 py-3 mb-4 text-4xl">2</div>
                                 <h3 className="text-2xl font-semibold mb-2">Accept Bookings</h3>
                                 <p className="text-gray-600">Manage your calendar and accept bookings from travelers.</p>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <div className="bg-primary text-white rounded-full p-6 mb-4 text-4xl">3</div>
+                            <div className="flex flex-col items-center border border-primary rounded-lg p-10 hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary text-white rounded-full px-6 py-3 mb-4 text-4xl">3</div>
                                 <h3 className="text-2xl font-semibold mb-2">Get Paid</h3>
                                 <p className="text-gray-600">Receive secure payments directly to your account.</p>
                             </div>
