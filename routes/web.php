@@ -140,7 +140,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $userRole = auth()->user()->role;
 
         if ($userRole === 'customer') {
-            $bookings = auth()->user()->bookings()->with(['property', 'payments'])->get();
+            $bookings = auth()->user()->bookings()->with(['property', 'payments'])->paginate(10);
             return Inertia::render('Customer/Dashboard', [
                 'bookings' => $bookings->toArray(),
             ]);
