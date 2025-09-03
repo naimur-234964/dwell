@@ -32,6 +32,15 @@ export default function Welcome() {
 
     const weekendDates = getWeekendDates();
 
+    const truncateHTML = (html: string, length: number) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const text = doc.body.textContent || "";
+        if (text.length > length) {
+            return text.substring(0, length) + '...';
+        }
+        return text;
+    };
+
 
     useEffect(() => {
         gsap.from(".gsap-animated-heading", {
@@ -180,6 +189,9 @@ export default function Welcome() {
                                     <div className="p-4">
                                         <h3 className="text-xl font-bold mb-1">{property.title}</h3>
                                         <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
+                                        {property.short_description && (
+                                            <div className="text-gray-700 text-sm mb-2" dangerouslySetInnerHTML={{ __html: truncateHTML(property.short_description, 80) }} />
+                                        )}
                                         <div className="mb-2">
                                             {/* Render stars based on reviews_avg_rating */}
                                             <div className="flex items-center">
@@ -317,6 +329,9 @@ export default function Welcome() {
                                     <div className="p-4">
                                         <h3 className="text-xl font-bold mb-1">{property.title}</h3>
                                         <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
+                                        {property.short_description && (
+                                            <div className="text-gray-700 text-sm mb-2" dangerouslySetInnerHTML={{ __html: truncateHTML(property.short_description, 80) }} />
+                                        )}
                                         <p className="text-lg font-semibold">
                                             {property.discount_price ? (
                                                 <>

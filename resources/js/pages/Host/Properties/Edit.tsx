@@ -3,12 +3,12 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Amenity, Property, PropertyImage } from '@/types';
 import { useState } from 'react';
 import ImageUpload from '@/components/image-upload';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import RichTextEditor from '@/components/RichTextEditor';
 
 interface HostPropertyEditProps {
     property: Property & { address: Address; amenities: Amenity[]; property_images: PropertyImage[] };
@@ -19,6 +19,7 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
     const { data, setData, post, processing, errors } = useForm({
         title: property.title,
         description: property.description,
+        short_description: property.short_description || '', // Added short_description
         price_per_night: property.price_per_night,
         discount_price: property.discount_price || '', // Added discount_price
         number_of_guests: property.number_of_guests,
@@ -91,12 +92,19 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
                             </div>
 
                             <div>
+                                <Label htmlFor="short_description">Short Description</Label>
+                                <RichTextEditor
+                                    value={data.short_description}
+                                    onChange={(value) => setData('short_description', value)}
+                                />
+                                {errors.short_description && <p className="text-red-500 text-sm">{errors.short_description}</p>}
+                            </div>
+
+                            <div>
                                 <Label htmlFor="description">Description</Label>
-                                <Textarea
-                                    id="description"
+                                <RichTextEditor
                                     value={data.description}
-                                    onChange={(e) => setData('description', e.target.value)}
-                                    className={errors.description ? 'border-red-500' : ''}
+                                    onChange={(value) => setData('description', value)}
                                 />
                                 {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                             </div>

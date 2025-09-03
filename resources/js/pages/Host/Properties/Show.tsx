@@ -41,7 +41,8 @@ export default function HostPropertyShow({ property }: HostPropertyShowProps) {
                             <h3 className="text-lg font-semibold mb-2">General Information</h3>
                             <div className="grid grid-cols-4 gap-x-4 gap-y-2">
                                 <p className="col-span-1"><strong>Title:</strong></p><p className="col-span-3">{property.title}</p>
-                                <p className="col-span-1"><strong>Description:</strong></p><p className="col-span-3">{property.description}</p>
+                                <p className="col-span-1"><strong>Short Description:</strong></p><div className="col-span-3" dangerouslySetInnerHTML={{ __html: property.short_description }} />
+                                <p className="col-span-1"><strong>Description:</strong></p><div className="col-span-3" dangerouslySetInnerHTML={{ __html: property.description }} />
                                 <p className="col-span-1"><strong>Price per Night:</strong></p><p className="col-span-3">${property.price_per_night}</p>
                                 <p className="col-span-1"><strong>Is Available:</strong></p><p className="col-span-3">{property.is_available ? 'Yes' : 'No'}</p>
                             </div>

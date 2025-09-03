@@ -3,15 +3,16 @@ import { Head, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Amenity } from '@/types';
 import { useState } from 'react';
 import ImageUpload from '@/components/image-upload';
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function HostPropertyCreate({ amenities }: { amenities: Amenity[] }) {
     const { data, setData, post, processing, errors } = useForm({
         title: '',
+        short_description: '',
         description: '',
         price_per_night: '',
         discount_price: '', // Added discount_price
@@ -72,12 +73,19 @@ export default function HostPropertyCreate({ amenities }: { amenities: Amenity[]
                     </div>
 
                     <div>
+                        <Label htmlFor="short_description">Short Description</Label>
+                        <RichTextEditor
+                            value={data.short_description}
+                            onChange={(value) => setData('short_description', value)}
+                        />
+                        {errors.short_description && <p className="text-red-500 text-sm">{errors.short_description}</p>}
+                    </div>
+
+                    <div>
                         <Label htmlFor="description">Description</Label>
-                        <Textarea
-                            id="description"
+                        <RichTextEditor
                             value={data.description}
-                            onChange={(e) => setData('description', e.target.value)}
-                            className={errors.description ? 'border-red-500' : ''}
+                            onChange={(value) => setData('description', value)}
                         />
                         {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                     </div>

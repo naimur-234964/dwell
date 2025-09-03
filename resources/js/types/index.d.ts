@@ -66,6 +66,7 @@ export interface Property {
     user_id: number;
     title: string;
     description: string;
+    short_description?: string;
     price_per_night: number;
     discount_price?: number; // Added for discounted properties
     number_of_guests: number;

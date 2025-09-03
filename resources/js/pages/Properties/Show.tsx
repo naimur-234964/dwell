@@ -2,6 +2,7 @@ import { type SharedData, type Property as PropertyType, type User, type Address
 import { Head, Link, usePage } from '@inertiajs/react';
 import StorefrontLayout from '@/layouts/StorefrontLayout';
 import { useState } from 'react';
+import * as Tabs from '@radix-ui/react-tabs';
 
 interface ShowProperty extends PropertyType {
     address: Address;
@@ -51,7 +52,7 @@ export default function Show() {
                 )}
                 <div className="p-4">
                     <h3 className="text-xl font-bold mb-1">{property.title}</h3>
-                    <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
+                    <div className="text-gray-600 text-sm mb-2" dangerouslySetInnerHTML={{ __html: property.short_description || '' }} />
                     <div className="flex items-center">
                         {renderStars(Number(property.reviews_avg_rating || 0))}
                         <span className="ml-2 text-gray-600 text-sm">({Number(property.reviews_avg_rating || 0).toFixed(1)} stars)</span>
@@ -87,6 +88,9 @@ export default function Show() {
                         <div>
                             <h1 className="text-4xl font-bold mb-4">{property.title}</h1>
                             <p className="text-lg text-gray-600 mb-4">{property.address.city}, {property.address.country}</p>
+                            {property.short_description && (
+                                <div className="text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: property.short_description }} />
+                            )}
                             <div className="flex items-center mb-4">
                                 {renderStars(Number(property.reviews_avg_rating || 0))}
                                 <span className="ml-2 text-gray-600 text-sm">({property.reviews.length} reviews)</span>
@@ -101,12 +105,36 @@ export default function Show() {
                                     `${property.price_per_night}`
                                 )}
                             </div>
-                            <p className="text-gray-700 mb-6">{property.description}</p>
                             <Link href={route('properties.booking.create', { property: property.id })}>
                                 <button className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-colors">Book Now</button>
                             </Link>
                         </div>
                     </div>
+                </div>
+
+                <div className="bg-white p-8 rounded-lg shadow-md mb-8">
+                    <Tabs.Root defaultValue="description">
+                        <Tabs.List className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
+                            <Tabs.Trigger value="description" className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">Description</Tabs.Trigger>
+                            <Tabs.Trigger value="reviews" className="inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">Reviews</Tabs.Trigger>
+                        </Tabs.List>
+                        <Tabs.Content value="description" className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <div className="text-gray-700 mb-6" dangerouslySetInnerHTML={{ __html: property.description }} />
+                        </Tabs.Content>
+                        <Tabs.Content value="reviews" className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                            <div className="space-y-4">
+                                {property.reviews.map((review) => (
+                                    <div key={review.id} className="border-b pb-4">
+                                        <div className="flex items-center mb-2">
+                                            <div className="font-bold mr-2">{review.user.name}</div>
+                                            <div className="flex">{renderStars(review.rating)}</div>
+                                        </div>
+                                        <p className="text-gray-700">{review.comment}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </Tabs.Content>
+                    </Tabs.Root>
                 </div>
 
                 {relatedProperties.length > 0 && (

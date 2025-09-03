@@ -25,6 +25,7 @@ class UpdatePropertyRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'short_description' => 'required|string|max:255', // Added short_description validation
             'price_per_night' => 'required|numeric|min:0',
             'discount_price' => 'nullable|numeric|min:0|lt:price_per_night', // Added discount_price validation
             'number_of_guests' => 'required|integer|min:1',

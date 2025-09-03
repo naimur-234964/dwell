@@ -14,6 +14,7 @@ class Property extends Model
         'user_id',
         'title',
         'description',
+        'short_description', // Added short_description
         'price_per_night',
         'discount_price',
         'number_of_guests',

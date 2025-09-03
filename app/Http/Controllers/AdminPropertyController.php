@@ -45,6 +45,7 @@ class AdminPropertyController extends Controller
                 'user_id' => $validatedData['user_id'],
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
+                'short_description' => $validatedData['short_description'], // Added short_description
                 'price_per_night' => $validatedData['price_per_night'],
                 'discount_price' => $validatedData['discount_price'] ?? null, // Added discount_price
                 'number_of_guests' => $validatedData['number_of_guests'],
@@ -115,6 +116,7 @@ class AdminPropertyController extends Controller
                 'user_id' => $validatedData['user_id'],
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
+                'short_description' => $validatedData['short_description'], // Added short_description
                 'price_per_night' => $validatedData['price_per_night'],
                 'discount_price' => $validatedData['discount_price'] ?? null, // Added discount_price
                 'number_of_guests' => $validatedData['number_of_guests'],
