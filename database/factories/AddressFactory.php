@@ -24,6 +24,8 @@ class AddressFactory extends Factory
             'state' => $this->faker->state(),
             'zip_code' => $this->faker->postcode(),
             'country' => $this->faker->country(),
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
         ];
     }
 }

@@ -17,7 +17,35 @@ class AmenityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->randomElement([
+                'Wi-Fi',
+                'TV',
+                'Kitchen',
+                'Washer',
+                'Free parking on premises',
+                'Paid parking on premises',
+                'Air conditioning',
+                'Heating',
+                'Dedicated workspace',
+                'Pool',
+                'Hot tub',
+                'Patio',
+                'BBQ grill',
+                'Outdoor dining area',
+                'Fire pit',
+                'Indoor fireplace',
+                'Piano',
+                'Exercise equipment',
+                'Lake access',
+                'Beach access',
+                'Ski-in/Ski-out',
+                'Outdoor shower',
+                'Smoke alarm',
+                'First aid kit',
+                'Fire extinguisher',
+                'Carbon monoxide alarm',
+            ]),
+            'description' => $this->faker->paragraph(),
         ];
     }
 }
