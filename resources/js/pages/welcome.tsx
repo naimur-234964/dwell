@@ -243,7 +243,16 @@ export default function Welcome() {
                                                 <span className="ml-2 text-gray-600 text-sm">({Number(property.reviews_avg_rating || 0).toFixed(1)} stars)</span>
                                             </div>
                                         </div>
-                                        <p className="text-lg font-semibold">${property.price_per_night}</p>
+                                        <p className="text-lg font-semibold">
+                                            {property.discount_price ? (
+                                                <>
+                                                    <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
+                                                    <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
+                                                </>
+                                            ) : (
+                                                `${property.price_per_night}`
+                                            )}
+                                        </p>
                                     </div>
                                 </div>
                             </Link>
@@ -271,10 +280,16 @@ export default function Welcome() {
                                     <div className="p-4">
                                         <h3 className="text-xl font-bold mb-1">{property.title}</h3>
                                         <p className="text-gray-600 text-sm mb-2">{property.address.city}, {property.address.country}</p>
-                                        <div className="flex items-center mb-2">
-                                            <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
-                                            <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
-                                        </div>
+                                        <p className="text-lg font-semibold">
+                                            {property.discount_price ? (
+                                                <>
+                                                    <span className="text-gray-500 line-through mr-2">${property.price_per_night}</span>
+                                                    <span className="text-lg font-semibold text-red-600">${property.discount_price}</span>
+                                                </>
+                                            ) : (
+                                                `${property.price_per_night}`
+                                            )}
+                                        </p>
                                     </div>
                                 </div>
                             </Link>

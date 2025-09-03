@@ -91,9 +91,18 @@ export default function Show() {
                                 {renderStars(Number(property.reviews_avg_rating || 0))}
                                 <span className="ml-2 text-gray-600 text-sm">({property.reviews.length} reviews)</span>
                             </div>
-                            <p className="text-2xl font-bold text-primary mb-4">${property.price_per_night}/night</p>
+                            <div className="text-2xl font-bold  mb-4">
+                                {property.discount_price ? (
+                                    <>
+                                        <span className="text-red-600 line-through mr-4">${property.price_per_night}</span>
+                                        <span className="font-semibold text-primary">${property.discount_price}</span>
+                                    </>
+                                ) : (
+                                    `${property.price_per_night}`
+                                )}
+                            </div>
                             <p className="text-gray-700 mb-6">{property.description}</p>
-                                                        <Link href={route('properties.booking.create', { property: property.id })}>
+                            <Link href={route('properties.booking.create', { property: property.id })}>
                                 <button className="bg-primary text-white px-8 py-3 rounded-lg font-bold hover:bg-secondary transition-colors">Book Now</button>
                             </Link>
                         </div>
