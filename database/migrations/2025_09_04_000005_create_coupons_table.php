@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('used_count')->default(0);
             $table->decimal('min_cart_value', 8, 2)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

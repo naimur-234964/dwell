@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_id')->constrained()->onDelete('cascade');
-            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade'); // Renamed from user_id to customer_id for clarity
+            $table->foreignId('customer_id')->constrained('users')->onDelete('cascade');
+            $table->string('phone_no')->nullable();
             $table->date('check_in_date');
             $table->date('check_out_date');
             $table->decimal('total_price', 8, 2);
-            $table->string('status')->default('pending'); // e.g., 'pending', 'confirmed', 'cancelled', 'completed'
+            $table->string('status')->default('pending');
+            $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

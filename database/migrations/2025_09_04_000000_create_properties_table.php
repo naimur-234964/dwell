@@ -15,14 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Host ID
             $table->string('title');
-            $table->text('description');
+            $table->text('short_description');
+            $table->longText('description');
             $table->decimal('price_per_night', 8, 2);
+            $table->decimal('discount_price', 10, 2)->nullable();
             $table->integer('number_of_guests');
             $table->integer('number_of_bedrooms');
             $table->integer('number_of_beds');
             $table->integer('number_of_bathrooms');
             $table->boolean('is_available')->default(true);
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->unique(['title', 'deleted_at']);
         });
     }
 
