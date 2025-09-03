@@ -14,6 +14,7 @@ export default function AdminPropertyCreate({ amenities }: { amenities: Amenity[
         title: '',
         description: '',
         price_per_night: '',
+        discount_price: '', // Added discount_price
         number_of_guests: '',
         number_of_bedrooms: '',
         number_of_beds: '',
@@ -82,65 +83,82 @@ export default function AdminPropertyCreate({ amenities }: { amenities: Amenity[
                         {errors.description && <p className="text-red-500 text-sm">{errors.description}</p>}
                     </div>
 
-                    <div>
-                        <Label htmlFor="price_per_night">Price per Night</Label>
-                        <Input
-                            id="price_per_night"
-                            type="number"
-                            step="0.01"
-                            value={data.price_per_night}
-                            onChange={(e) => setData('price_per_night', e.target.value)}
-                            className={errors.price_per_night ? 'border-red-500' : ''}
-                        />
-                        {errors.price_per_night && <p className="text-red-500 text-sm">{errors.price_per_night}</p>}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <Label htmlFor="price_per_night">Price per Night</Label>
+                            <Input
+                                id="price_per_night"
+                                type="number"
+                                step="0.01"
+                                value={data.price_per_night}
+                                onChange={(e) => setData('price_per_night', e.target.value)}
+                                className={errors.price_per_night ? 'border-red-500' : ''}
+                            />
+                            {errors.price_per_night && <p className="text-red-500 text-sm">{errors.price_per_night}</p>}
+                        </div>
+
+                        <div>
+                            <Label htmlFor="discount_price">Discount Price (Optional)</Label>
+                            <Input
+                                id="discount_price"
+                                type="number"
+                                step="0.01"
+                                value={data.discount_price}
+                                onChange={(e) => setData('discount_price', e.target.value)}
+                                className={errors.discount_price ? 'border-red-500' : ''}
+                            />
+                            {errors.discount_price && <p className="text-red-500 text-sm">{errors.discount_price}</p>}
+                        </div>
                     </div>
 
-                    <div>
-                        <Label htmlFor="number_of_guests">Number of Guests</Label>
-                        <Input
-                            id="number_of_guests"
-                            type="number"
-                            value={data.number_of_guests}
-                            onChange={(e) => setData('number_of_guests', e.target.value)}
-                            className={errors.number_of_guests ? 'border-red-500' : ''}
-                        />
-                        {errors.number_of_guests && <p className="text-red-500 text-sm">{errors.number_of_guests}</p>}
-                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <Label htmlFor="number_of_guests">Number of Guests</Label>
+                            <Input
+                                id="number_of_guests"
+                                type="number"
+                                value={data.number_of_guests}
+                                onChange={(e) => setData('number_of_guests', e.target.value)}
+                                className={errors.number_of_guests ? 'border-red-500' : ''}
+                            />
+                            {errors.number_of_guests && <p className="text-red-500 text-sm">{errors.number_of_guests}</p>}
+                        </div>
 
-                    <div>
-                        <Label htmlFor="number_of_bedrooms">Number of Bedrooms</Label>
-                        <Input
-                            id="number_of_bedrooms"
-                            type="number"
-                            value={data.number_of_bedrooms}
-                            onChange={(e) => setData('number_of_bedrooms', e.target.value)}
-                            className={errors.number_of_bedrooms ? 'border-red-500' : ''}
-                        />
-                        {errors.number_of_bedrooms && <p className="text-red-500 text-sm">{errors.number_of_bedrooms}</p>}
-                    </div>
+                        <div>
+                            <Label htmlFor="number_of_bedrooms">Number of Bedrooms</Label>
+                            <Input
+                                id="number_of_bedrooms"
+                                type="number"
+                                value={data.number_of_bedrooms}
+                                onChange={(e) => setData('number_of_bedrooms', e.target.value)}
+                                className={errors.number_of_bedrooms ? 'border-red-500' : ''}
+                            />
+                            {errors.number_of_bedrooms && <p className="text-red-500 text-sm">{errors.number_of_bedrooms}</p>}
+                        </div>
 
-                    <div>
-                        <Label htmlFor="number_of_beds">Number of Beds</Label>
-                        <Input
-                            id="number_of_beds"
-                            type="number"
-                            value={data.number_of_beds}
-                            onChange={(e) => setData('number_of_beds', e.target.value)}
-                            className={errors.number_of_beds ? 'border-red-500' : ''}
-                        />
-                        {errors.number_of_beds && <p className="text-red-500 text-sm">{errors.number_of_beds}</p>}
-                    </div>
+                        <div>
+                            <Label htmlFor="number_of_beds">Number of Beds</Label>
+                            <Input
+                                id="number_of_beds"
+                                type="number"
+                                value={data.number_of_beds}
+                                onChange={(e) => setData('number_of_beds', e.target.value)}
+                                className={errors.number_of_beds ? 'border-red-500' : ''}
+                            />
+                            {errors.number_of_beds && <p className="text-red-500 text-sm">{errors.number_of_beds}</p>}
+                        </div>
 
-                    <div>
-                        <Label htmlFor="number_of_bathrooms">Number of Bathrooms</Label>
-                        <Input
-                            id="number_of_bathrooms"
-                            type="number"
-                            value={data.number_of_bathrooms}
-                            onChange={(e) => setData('number_of_bathrooms', e.target.value)}
-                            className={errors.number_of_bathrooms ? 'border-red-500' : ''}
-                        />
-                        {errors.number_of_bathrooms && <p className="text-red-500 text-sm">{errors.number_of_bathrooms}</p>}
+                        <div>
+                            <Label htmlFor="number_of_bathrooms">Number of Bathrooms</Label>
+                            <Input
+                                id="number_of_bathrooms"
+                                type="number"
+                                value={data.number_of_bathrooms}
+                                onChange={(e) => setData('number_of_bathrooms', e.target.value)}
+                                className={errors.number_of_bathrooms ? 'border-red-500' : ''}
+                            />
+                            {errors.number_of_bathrooms && <p className="text-red-500 text-sm">{errors.number_of_bathrooms}</p>}
+                        </div>
                     </div>
 
                     <div className="flex items-center space-x-2">
@@ -245,49 +263,51 @@ export default function AdminPropertyCreate({ amenities }: { amenities: Amenity[
                         />
                         {errors.address_line_2 && <p className="text-red-500 text-sm">{errors.address_line_2}</p>}
                     </div>
-                    <div>
-                        <Label htmlFor="city">City</Label>
-                        <Input
-                            id="city"
-                            type="text"
-                            value={data.city}
-                            onChange={(e) => setData('city', e.target.value)}
-                            className={errors.city ? 'border-red-500' : ''}
-                        />
-                        {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="state">State</Label>
-                        <Input
-                            id="state"
-                            type="text"
-                            value={data.state}
-                            onChange={(e) => setData('state', e.target.value)}
-                            className={errors.state ? 'border-red-500' : ''}
-                        />
-                        {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="zip_code">Zip Code</Label>
-                        <Input
-                            id="zip_code"
-                            type="text"
-                            value={data.zip_code}
-                            onChange={(e) => setData('zip_code', e.target.value)}
-                            className={errors.zip_code ? 'border-red-500' : ''}
-                        />
-                        {errors.zip_code && <p className="text-red-500 text-sm">{errors.zip_code}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="country">Country</Label>
-                        <Input
-                            id="country"
-                            type="text"
-                            value={data.country}
-                            onChange={(e) => setData('country', e.target.value)}
-                            className={errors.country ? 'border-red-500' : ''}
-                        />
-                        {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <Label htmlFor="city">City</Label>
+                            <Input
+                                id="city"
+                                type="text"
+                                value={data.city}
+                                onChange={(e) => setData('city', e.target.value)}
+                                className={errors.city ? 'border-red-500' : ''}
+                            />
+                            {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="state">State</Label>
+                            <Input
+                                id="state"
+                                type="text"
+                                value={data.state}
+                                onChange={(e) => setData('state', e.target.value)}
+                                className={errors.state ? 'border-red-500' : ''}
+                            />
+                            {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="zip_code">Zip Code</Label>
+                            <Input
+                                id="zip_code"
+                                type="text"
+                                value={data.zip_code}
+                                onChange={(e) => setData('zip_code', e.target.value)}
+                                className={errors.zip_code ? 'border-red-500' : ''}
+                            />
+                            {errors.zip_code && <p className="text-red-500 text-sm">{errors.zip_code}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="country">Country</Label>
+                            <Input
+                                id="country"
+                                type="text"
+                                value={data.country}
+                                onChange={(e) => setData('country', e.target.value)}
+                                className={errors.country ? 'border-red-500' : ''}
+                            />
+                            {errors.country && <p className="text-red-500 text-sm">{errors.country}</p>}
+                        </div>
                     </div>
 
                     <Button type="submit" disabled={processing}>Create Property</Button>

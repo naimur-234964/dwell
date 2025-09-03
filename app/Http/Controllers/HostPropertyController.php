@@ -46,6 +46,7 @@ class HostPropertyController extends Controller
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'price_per_night' => $validatedData['price_per_night'],
+                'discount_price' => $validatedData['discount_price'] ?? null, // Added discount_price
                 'number_of_guests' => $validatedData['number_of_guests'],
                 'number_of_bedrooms' => $validatedData['number_of_bedrooms'],
                 'number_of_beds' => $validatedData['number_of_beds'],
@@ -120,6 +121,7 @@ class HostPropertyController extends Controller
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'price_per_night' => $validatedData['price_per_night'],
+                'discount_price' => $validatedData['discount_price'] ?? null, // Added discount_price
                 'number_of_guests' => $validatedData['number_of_guests'],
                 'number_of_bedrooms' => $validatedData['number_of_bedrooms'],
                 'number_of_beds' => $validatedData['number_of_beds'],

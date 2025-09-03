@@ -20,6 +20,7 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
         title: property.title,
         description: property.description,
         price_per_night: property.price_per_night,
+        discount_price: property.discount_price || '', // Added discount_price
         number_of_guests: property.number_of_guests,
         number_of_bedrooms: property.number_of_bedrooms,
         number_of_beds: property.number_of_beds,
@@ -111,6 +112,19 @@ export default function HostPropertyEdit({ property, amenities }: HostPropertyEd
                             className={errors.price_per_night ? 'border-red-500' : ''}
                         />
                         {errors.price_per_night && <p className="text-red-500 text-sm">{errors.price_per_night}</p>}
+                    </div>
+
+                    <div>
+                        <Label htmlFor="discount_price">Discount Price (Optional)</Label>
+                        <Input
+                            id="discount_price"
+                            type="number"
+                            step="0.01"
+                            value={data.discount_price}
+                            onChange={(e) => setData('discount_price', e.target.value)}
+                            className={errors.discount_price ? 'border-red-500' : ''}
+                        />
+                        {errors.discount_price && <p className="text-red-500 text-sm">{errors.discount_price}</p>}
                     </div>
 
                     <div>
