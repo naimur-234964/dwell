@@ -22,7 +22,7 @@ class AdminCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|unique:coupons,code,' . $this->route('coupon'),
+            'code' => 'required|string|unique:coupons,code,' . $this->route('coupon')->id,
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
             'starts_at' => 'nullable|date',

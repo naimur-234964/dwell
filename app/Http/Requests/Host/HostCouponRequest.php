@@ -22,7 +22,7 @@ class HostCouponRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => 'required|string|unique:coupons,code,' . ($this->route('coupon') ? $this->route('coupon')->id : 'NULL') . ',id,user_id,' . auth()->id(),
+            'code' => 'required|string|unique:coupons,code,' . $this->route('coupon')->id . ',id,user_id,' . auth()->id(),
             'type' => 'required|in:percentage,fixed',
             'value' => 'required|numeric|min:0',
             'starts_at' => 'nullable|date',
